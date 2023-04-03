@@ -23,15 +23,15 @@ def f1_score(y_true, y_pred):
 import os
 import urllib.request
 
-filename = "model.h5" # replace with your desired file name
-url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/flask/model.h5" # replace with the URL of the file you want to download
+filename = "model.h5"
+url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/flask/model.h5"
 
 if not os.path.exists(filename):
-    print(f"{filename} does not exist. Downloading...")
-    urllib.request.urlretrieve(url, filename)
-    print(f"{filename} downloaded.")
+  print(f"{filename} does not exist. Downloading...")
+  urllib.request.urlretrieve(url, filename)
+  print(f"{filename} downloaded.")
 else:
-    print(f"{filename} already exists.")
+  print(f"{filename} already exists.")
 
 # The following line is the one responsible for actually loading the model
 # we need to define f1_score and pass it in custom_objects to load the model properly
