@@ -24,11 +24,13 @@ def f1_score(y_true, y_pred):
 # we need to define f1_score and pass it in custom_objects to load the model properly
 loadedModel = keras.models.load_model(model_path, custom_objects={'f1_score': f1_score})
 
-import urllib.request
-import io
+import requests
+from io import BytesIO
+
 def preprocess(url):
-  image_data = urllib.request.urlopen(url).read()
-  img = Image.open(io.BytesIO(image_data))
+  print('url is', url) # temp
+  response = requests.get(url)
+  img = Image.open(BytesIO(response.content)).convert('RGB')
   img = img.resize((img_w,img_h))
   # Convert the image to a NumPy array
   image_array = np.array(img)
@@ -88,7 +90,7 @@ def post_post():
 @app.route('/api/predict', methods=['POST'])
 def predict_post():
   data = request.get_json()
-  url = data.get('field')
+  url = data.get('url')
   reshaped = preprocess(url)
   prediction = predict(reshaped)
   result = {
