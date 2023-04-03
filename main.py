@@ -24,7 +24,7 @@ import os
 import urllib.request
 
 filename = "model.h5"
-url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/flask/model.h5"
+url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/files/model.h5"
 
 if not os.path.exists(filename):
   print(f"{filename} does not exist. Downloading...")
