@@ -28,7 +28,7 @@ import requests
 from io import BytesIO
 
 def preprocess(url):
-  print('url is', url) # temp
+  # print('url is', url) # temp
   response = requests.get(url)
   img = Image.open(BytesIO(response.content)).convert('RGB')
   img = img.resize((img_w,img_h))
@@ -98,9 +98,11 @@ def predict_post():
       'result': prediction
     }
     return jsonify(result)
-  except:
+  except Exception as e:
+    print(e)
     result = {
-      'result': "Error"
+      'result': "Error",
+      'exception': e
     }
     return jsonify(result)
 
