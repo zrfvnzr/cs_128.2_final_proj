@@ -27,10 +27,10 @@ loadedModel = keras.models.load_model(model_path, custom_objects={'f1_score': f1
 import requests
 from io import BytesIO
 
-def preprocess(url):
+def preprocess(img):
   # print('url is', url) # temp
-  response = requests.get(url)
-  img = Image.open(BytesIO(response.content)).convert('RGB')
+  # response = requests.get(url)
+  # img = Image.open(BytesIO(response.content)).convert('RGB')
   img = img.resize((img_w,img_h))
   # Convert the image to a NumPy array
   image_array = np.array(img)
@@ -75,6 +75,7 @@ def predict(reshaped):
 
 
 from flask import Flask, jsonify, request
+import io
 
 app = Flask(__name__)
 
@@ -92,14 +93,39 @@ def post_post():
 @app.route('/api/predict', methods=['POST'])
 def predict_post():
   try:
-    data = request.get_json()
-    url = data.get('url')
-    reshaped = preprocess(url)
+
+    # print('request.files is', request.files) # temp
+
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return 'No file part in the request', 400
+
+    file = request.files['file']
+    # check if the file is empty
+    if file.filename == '':
+        return 'No file selected for processing', 400
+
+    # Read image data from request body
+    file_data = file.read()
+
+    # Open image using PIL and perform some operation on it
+    with Image.open(io.BytesIO(file_data)) as img:
+        # img = img.rotate(45)
+        # img_data = io.BytesIO()
+        # img.save(img_data, format='JPEG')
+        # img_data.seek(0)
+    # Return processed image as response
+    # return img_data.read(), 200, {'Content-Type': 'image/jpeg'}
+
+      reshaped = preprocess(img)
+      
     prediction = predict(reshaped)
+
     result = {
       'result': prediction
     }
     return jsonify(result)
+  
   except Exception as e:
     print(e)
     result = {
