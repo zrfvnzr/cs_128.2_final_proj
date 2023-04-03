@@ -89,14 +89,19 @@ def post_post():
 
 @app.route('/api/predict', methods=['POST'])
 def predict_post():
-  data = request.get_json()
-  url = data.get('url')
-  reshaped = preprocess(url)
-  prediction = predict(reshaped)
-  result = {
-    'result': prediction
-  }
-  return jsonify(result)
+  try:
+    data = request.get_json()
+    url = data.get('url')
+    reshaped = preprocess(url)
+    prediction = predict(reshaped)
+    result = {
+      'result': prediction
+    }
+    return jsonify(result)
+  except:
+    result = {
+      'result': "Error"
+    }
 
 # example post route with json request body
 # @app.route('/api/data', methods=['POST'])
