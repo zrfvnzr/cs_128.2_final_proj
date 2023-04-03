@@ -78,6 +78,8 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+print('Flask running!')
+
 @app.route('/')
 def index():
   return "Hello world!"
