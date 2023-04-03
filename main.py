@@ -102,6 +102,7 @@ def predict_post():
     result = {
       'result': "Error"
     }
+    return jsonify(result)
 
 # example post route with json request body
 # @app.route('/api/data', methods=['POST'])
