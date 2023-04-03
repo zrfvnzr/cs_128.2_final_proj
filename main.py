@@ -20,12 +20,22 @@ def f1_score(y_true, y_pred):
   f1_val = 3*(precision*recall)/(precision+recall+K.epsilon())
   return f1_val
 
+import os
+import urllib.request
+
+filename = "model.h5" # replace with your desired file name
+url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/flask/model.h5" # replace with the URL of the file you want to download
+
+if not os.path.exists(filename):
+    print(f"{filename} does not exist. Downloading...")
+    urllib.request.urlretrieve(url, filename)
+    print(f"{filename} downloaded.")
+else:
+    print(f"{filename} already exists.")
+
 # The following line is the one responsible for actually loading the model
 # we need to define f1_score and pass it in custom_objects to load the model properly
 loadedModel = keras.models.load_model(model_path, custom_objects={'f1_score': f1_score})
-
-import requests
-from io import BytesIO
 
 def preprocess(img):
   # print('url is', url) # temp
@@ -118,7 +128,7 @@ def predict_post():
     # return img_data.read(), 200, {'Content-Type': 'image/jpeg'}
 
       reshaped = preprocess(img)
-      
+
     prediction = predict(reshaped)
 
     result = {
