@@ -1,0 +1,19 @@
+{
+  "name": "cs_128.2_final_proj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zrfvnzr/cs_128.2_final_proj.git"
+  },
+  "author": "zrfvnzr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zrfvnzr/cs_128.2_final_proj/issues"
+  },
+  "homepage": "https://github.com/zrfvnzr/cs_128.2_final_proj#readme"
+}
