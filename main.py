@@ -4,13 +4,32 @@ from tensorflow import keras
 import keras.backend as K
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from PIL import Image
-import warnings
-warnings.filterwarnings('ignore')
+import os
+import urllib.request
+import time
+# import warnings
+# warnings.filterwarnings('ignore')
 
 img_w, img_h = 225, 225
-input_path = ''
-model_path = './model.h5'
+# model_path = './model.h5'
+model_path = './copy_model.h5'
+# filename = "model.h5"
+filename = "copy_model.h5"
+url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/files/model.h5"
 
+# check if model file exists, else download it
+if not os.path.exists(filename):
+  print(f"{filename} does not exist. Downloading...")
+  def reporthook(count, block_size, total_size):
+    percent = int(count * block_size * 100 / total_size)
+    print(f"Downloading... {percent}%")
+    time.sleep(2)  # add a 0.5 second delay
+  urllib.request.urlretrieve(url, filename, reporthook=reporthook)
+  print(f"{filename} downloaded.")
+else:
+  print(f"{filename} already exists.")
+
+# we need to define f1_score and pass it in custom_objects to load the model properly
 def f1_score(y_true, y_pred):
   true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
   possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
@@ -20,56 +39,39 @@ def f1_score(y_true, y_pred):
   f1_val = 3*(precision*recall)/(precision+recall+K.epsilon())
   return f1_val
 
-import os
-import urllib.request
-
-filename = "model.h5"
-url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/files/model.h5"
-
-if not os.path.exists(filename):
-  print(f"{filename} does not exist. Downloading...")
-  urllib.request.urlretrieve(url, filename)
-  print(f"{filename} downloaded.")
-else:
-  print(f"{filename} already exists.")
-
-# The following line is the one responsible for actually loading the model
-# we need to define f1_score and pass it in custom_objects to load the model properly
+# the following line is the one responsible for actually loading the model
 loadedModel = keras.models.load_model(model_path, custom_objects={'f1_score': f1_score})
 
 def preprocess(img):
-  # print('url is', url) # temp
-  # response = requests.get(url)
-  # img = Image.open(BytesIO(response.content)).convert('RGB')
+  # resize image
   img = img.resize((img_w,img_h))
-  # Convert the image to a NumPy array
+  # convert the image to a NumPy array
   image_array = np.array(img)
-  # Normalize the pixel values of the image array to the same range as the images used to train the loaded model
+  # normalize the pixel values of the image array to the same range as the images used to train the loaded model
   normalized = image_array.astype('float32')
   normalized /= 255
-  # Reshape the input array to have a rank of 4
+  # reshape the input array to have a rank of 4
   reshaped = np.reshape(normalized, (1, img_h, img_w, 3))
-  # Data Augmentation
+  # data Augmentation
   datagen = ImageDataGenerator(
-      featurewise_center=False,
-      samplewise_center=False,
-      featurewise_std_normalization=False,
-      samplewise_std_normalization=False,
-      zca_whitening=False,
-      rotation_range=20.,
-      width_shift_range=0.5,
-      height_shift_range=0.5,
-      shear_range=30.,
-      zoom_range=0.,
-      channel_shift_range=0.,
-      fill_mode='nearest',
-      cval=0.,
-      horizontal_flip=0.2,
-      vertical_flip=0.2,
-      rescale=None)
+    featurewise_center=False,
+    samplewise_center=False,
+    featurewise_std_normalization=False,
+    samplewise_std_normalization=False,
+    zca_whitening=False,
+    rotation_range=20.,
+    width_shift_range=0.5,
+    height_shift_range=0.5,
+    shear_range=30.,
+    zoom_range=0.,
+    channel_shift_range=0.,
+    fill_mode='nearest',
+    cval=0.,
+    horizontal_flip=0.2,
+    vertical_flip=0.2,
+    rescale=None)
   datagen.fit(reshaped)
   return reshaped
-
 
 def predict(reshaped):
    # Pass the preprocessed image to the loaded model for prediction
@@ -84,6 +86,8 @@ def predict(reshaped):
   return prediction
 
 
+# Flask server
+
 from flask import Flask, jsonify, request
 import io
 
@@ -95,11 +99,12 @@ print('Flask running!')
 def index():
   return "Hello world!"
 
-# test post route to make sure there are no CORS errors
+# test post route to make sure there are no CORS errors and that app is running
 @app.post('/post')
 def post_post():
   return "Post!"
 
+# expected request body: file with key 'file' containing fundus image
 @app.route('/api/predict', methods=['POST'])
 def predict_post():
   try:
