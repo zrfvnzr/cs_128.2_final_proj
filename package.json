@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/zrfvnzr/cs_128.2_final_proj/issues"
   },
-  "homepage": "https://github.com/zrfvnzr/cs_128.2_final_proj#readme"
+  "homepage": "https://github.com/zrfvnzr/cs_128.2_final_proj#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "connect-history-api-fallback": "^2.0.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "path": "^0.12.7"
+  }
 }
