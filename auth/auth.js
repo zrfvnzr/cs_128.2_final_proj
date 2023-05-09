@@ -10,7 +10,7 @@
 
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const database = require("./database/database");
+const database = require("../database/database");
 const express = require("express");
 const LocalStrategy = require("passport-local");
 const router = express.Router();
@@ -100,7 +100,7 @@ async function configureLocalStrategy(db) {
 // Routes
 
 // get all users
-router.post("/api/getAllUsers", async (req, res) => {
+router.post("/api/auth/getAllUsers", async (req, res) => {
     try {
         const db = await database.openOrCreateDB(dbPath);
         const rows = await database.all(db, `SELECT role, username FROM user ORDER BY role ASC`, [], false);
@@ -114,7 +114,7 @@ router.post("/api/getAllUsers", async (req, res) => {
 // end get all users
 
 // authorize
-router.post("/api/authorize", (req, res) => {
+router.post("/api/auth/authorize", (req, res) => {
     if (req.user) {
         res.json({ username: req.user.username, role: req.user.role }).send();
     } else {
@@ -124,7 +124,7 @@ router.post("/api/authorize", (req, res) => {
 // end authorize
 
 // register
-router.post("/api/register", async (req, res) => {
+router.post("/api/auth/register", async (req, res) => {
     // check if username already exists
     try {
         const db = await database.openOrCreateDB(dbPath);
@@ -145,7 +145,7 @@ router.post("/api/register", async (req, res) => {
 // end register
 
 // login
-router.post("/api/login", (req, res) => {
+router.post("/api/auth/login", (req, res) => {
     passport.authenticate("local", (err, user, info, status) => {
         if (user) {
             req.logIn(user, (err) => {
@@ -165,7 +165,7 @@ router.post("/api/login", (req, res) => {
 // end login
 
 // logout
-router.post("/api/logout", function (req, res) {
+router.post("/api/auth/logout", function (req, res) {
     try {
         req.logout(function (err) {
             if (err) {
