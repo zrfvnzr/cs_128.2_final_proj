@@ -1,9 +1,9 @@
-/* @dependencies
-  body-parser
-  connect-history-api-fallback
-  dotenv
-  express
-  path
+/*  @dependencies
+    body-parser
+    connect-history-api-fallback
+    dotenv
+    express
+    path
 */
 
 async function main() {
