@@ -1,3 +1,5 @@
 .env
-node_modules
+auth/auth.sqlite
+auth/session.db
 frontend/node_modules
+node_modules
