@@ -7,10 +7,12 @@ const app = createApp(App)
 import { createRouter, createWebHistory } from 'vue-router'
 
 // import route components
+import Admin from './views/Admin.vue'
 
 // set routes
 const routes = [
 //   {path: '/', component: Home}
+    {path: '/admin', component: Admin}
 ]
 
 const router = createRouter({
