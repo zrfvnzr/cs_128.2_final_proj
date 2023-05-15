@@ -2,13 +2,8 @@
 </script>
 
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div style="display: flex; flex: 1; flex-direction: column;">
+    <router-view :key="$route.fullPath" />
   </div>
 </template>
 
