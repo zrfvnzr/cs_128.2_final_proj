@@ -5,6 +5,7 @@ import keras.backend as K
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from PIL import Image
 import os
+import cv2
 import urllib.request
 import time
 # import warnings
@@ -51,6 +52,8 @@ def preprocess(img):
   normalized = image_array.astype('float32')
   normalized /= 255
   # reshape the input array to have a rank of 4
+  gaussian = cv2.addWeighted(normalized, 4, cv2.GaussianBlur(normalized, (0,0), 10), -4, 128)
+  gaussian = cv2.resize(gaussian, (224, 224))
   reshaped = np.reshape(normalized, (1, img_h, img_w, 3))
   # data Augmentation
   datagen = ImageDataGenerator(
