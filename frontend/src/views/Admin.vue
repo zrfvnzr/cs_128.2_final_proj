@@ -78,6 +78,24 @@ export default {
     </div>
     <!-- end Users Index -->
 
+    <!-- User Create -->
+    <div ref="userCreateDiv">
+        <!-- User Create Header -->
+        <div class="header">
+            <div>
+                <i class="bi bi-person-plus-fill"></i>
+                <h1>Create User</h1>
+            </div>
+        </div>
+        <!-- end User Create Header -->
+        <!-- User Create Body -->
+        <div class="temp-body">
+
+        </div>
+        <!-- end User Create Body -->
+    </div>
+    <!-- end User Create -->
+
     <!-- User Edit -->
     <div ref="userEditDiv">
         <!-- User Edit Header -->
@@ -89,44 +107,43 @@ export default {
         </div>
         <!-- end User Edit Header -->
         <!-- User Edit Body -->
+        <div class="temp-body">
+
+        </div>
         <!-- end User Edit Body -->
     </div>
     <!-- end User Edit -->
 
-    <!-- Old User Edit -->
-    <div ref="userEditDiv" class="border border-2 border-dark mb-3 p-3">
-        <h2>Old Edit User</h2>
-        <div class="align-items-start d-flex flex-column">
-            <label>Username</label>
-            <input type="text">
-            <label>New Password</label>
-            <input type="password">
-            <label>Role</label>
-            <select>
-                <option value="admin">Admin</option>
-                <option value="doctor">Doctor</option>
-            </select>
+    <!-- SQL Console -->
+    <div ref="sqlConsoleDiv">
+        <!-- SQL Console Header -->
+        <div class="header">
+            <div>
+                <i class="bi bi-hdd-stack-fill"></i>
+                <h1>SQL Console</h1>
+            </div>
         </div>
-    </div>
-    <!-- end  OldUser Edit -->
+        <!-- end SQL Console Header -->
+        <!-- SQL Console Body -->
+        <div class="temp-body">
 
-    <!-- Old SQL Console -->
-    <div ref="sqlConsoleDiv" class="border border-2 border-dark p-3">
-        <h2>Old SQL Console</h2>
-        <div class="align-items-start d-flex flex-column">
-            <label>Execute SQL</label>
-            <textarea cols="100" rows="5"></textarea>
-            <label>Response</label>
-            <textarea disabled cols="100" rows="5"></textarea>
         </div>
-        
+        <!-- end SQL Console Body -->
     </div>
-    <!-- end Old SQL Console -->
+    <!-- end SQL Console -->
 
 </div>
 </template>
 
 <style scoped>
+/* TEMP */
+.temp-body {
+    border: 2px dotted black;
+    margin-bottom: 2rem;
+    min-height: 5rem;
+}
+/* end TEMP */
+
 /* Headers */
 .header {
     display: flex;
