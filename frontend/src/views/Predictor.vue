@@ -2,35 +2,83 @@
 import Header from '../components/Header.vue'
 export default {
         name: 'Predictor',
-        components: [Header]
+        components: {Header},
+        data() {
+            return {
+                patient: {
+                    lastName: '',
+                    givenName: '',
+                    middleName: '',
+                    sex: 'male',
+                    birthDate: '',
+                    age: null,
+                    email: '',
+                    contact: null,
+                    physician: '',
+                }
+            }
+        },
+        methods: {
+            // STORE PATIENT INFO IN DATABASE
+            async saveInfo(){
+                try {
+                    console.log(this.patient)
+                    // DATABASE FOR PATIENT RECORDS
+                    const response = await this.axios.post('/api/patientRecords', {
+                        lastName: this.patient.lastName,
+                        givenName: this.patient.givenName,
+                        middleName: this.patient.middleName,
+                        sex: this.patient.sex,
+                        birthDate: this.patient.birthDate,
+                        age: this.patient.age,
+                        email: this.patient.email,
+                        contact: this.patient.contact,
+                        physician: this.patient.physician,
+                    })
+                } catch (error) {
+                    console.log('Error on saveInfo')
+                    console.log(error)
+                    alert('Error on saveInfo ')
+                }
+            },
+            // SELECT IMAGE 
+            uploadImage(){
+                let patientImage = document.createElement('input');
+
+            },
+            // PREDICTOR
+            predict(){
+
+            }
+        }
 }
 </script>
 
 <template>
 <Header />
     <div class="" id="container">
-        <div>
+        <div class="patientInformation">
             <form class="row" style="padding: 10px;">
                 <div class="col-md" style="width: 20%;">
                         <label for="lastName">Last Name <h6 style="display: inline; color: red;">*</h6></label>
-                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="">
+                        <input v-model="patient.lastName" type="text" class="form-control" name="lastName" id="lastName" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
                     <label for="givenName">Given Name <h6 style="display: inline; color: red;">*</h6></label>
-                    <input type="text" class="form-control" name="givenName" id="givenName" placeholder="">
+                    <input v-model="patient.givenName" type="text" class="form-control" name="givenName" id="givenName" placeholder="">
                 </div>
                 <div class="col-md" style="display: inline;">
                     <label for="middleName">Middle Name</label>
-                    <input type="text" class="form-control" name="middleName" id="middleName" placeholder="  ">
+                    <input v-model="patient.middleName" type="text" class="form-control" name="middleName" id="middleName" placeholder="  ">
                 </div>
                 <div class="col-md">
                     <label for="sex" style="padding-right: 10px;">Sex <h6 style="display: inline; color: red;">*</h6></label>
                     <div class="form-check form-check" >
-                        <input class="form-check-input" type="radio" name="sex" id="male" value="option1">
+                        <input v-model="patient" :value="'male'" class="form-check-input" type="radio" name="sex" id="male">
                         <label class="form-check-label" for="male">Male</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="sex" id="female" value="option2">
+                        <input v-model="patient" :value="'female'" class="form-check-input" type="radio" name="sex" id="female" >
                         <label class="form-check-label" for="female">Female</label>
                     </div>
                 </div>
@@ -38,35 +86,34 @@ export default {
             <form class="row" style="padding: 10px">
                 <div class="col-md" style="width: 20%;">
                         <label for="birthDate">Date of Birth <h6 style="display: inline; color: red;">*</h6></label>
-                        <input type="text" class="form-control" name="birthDate" id="birthDate" placeholder="">
+                        <input v-model="patient.birthDate" type="text" class="form-control" name="birthDate" id="birthDate" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
                     <label for="age">Age</label>
-                    <input type="text" class="form-control" name="age" id="age" placeholder="">
+                    <input v-model="patient.age" type="text" class="form-control" name="age" id="age" placeholder="">
                 </div>
                 <div class="col-md" style="display: inline;">
                     <label for="email">Email Address</label>
-                    <input type="text" class="form-control" name="email" id="email" placeholder="  ">
+                    <input v-model="patient.email" type="text" class="form-control" name="email" id="email" placeholder="  ">
                 </div>  
                 <div class="col-md" style="width: 20%;">
                         <label for="contact">Contact Number <h6 style="display: inline; color: red;">*</h6></label>
-                        <input type="text" class="form-control" name="contact" id="contact" placeholder="">
+                        <input v-model="patient.contact" type="text" class="form-control" name="contact" id="contact" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
                     <label for="physician">Assigned Physician <h6 style="display: inline; color: red;">*</h6></label>
-                    <input type="text" class="form-control" name="physician" id="physician" placeholder="">
+                    <input v-model="patient.physician" type="text" class="form-control" name="physician" id="physician" placeholder="">
                 </div>
             </form>
         </div>
         <div id="uploadImageDIv" >
             <div id="upimgHeader">
                 <h5 style="display: inline;"><i class="bi bi-card-image" style="padding-right: 5px;"></i>Upload Image</h5>
-                <button id="uploadButton" style="color: white">Select Image</button>
+                <button onclick="uploadImage()" id="uploadButton" style="color: white">Select Image</button>
             </div>
             <div id="imageDiv" >
-            
             </div>
-            <button id="predictButton" style="color: white; font-weight: 500;">Predict</button>
+            <button onclick="predictImage(); saveInfo()" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
         </div>
     </div>
 

@@ -1,11 +1,50 @@
 <script>
 export default {
-    name: 'Login'
+    name: 'Login',
+    computed: {
+      loggedOut(){
+        return (location.search === 'toLoggedOut')
+      }
+    },
+    data () {
+      return {
+        username: '',
+        password: '',
+      }
+    },
+    async mounted(){
+    },
+    methods: {
+      async login(){
+        router.post("/api/auth/login", (req, res) => {
+          passport.authenticate("local", (err, user, info, status) => {
+              if (user) {
+                  req.logIn(user, (err) => {
+                      if (err) {
+                          console.log("Error on req.logIn"); // temp
+                          console.log(err);
+                          res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
+                      } else {
+                          res.json({ messsage: "Login success", role: user.role }).send();
+                      }
+                  });
+              } else {
+                  res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
+              }
+          })(req, res);
+      });
+    }
+  }
 }
 </script>
 
 <template>
 <div class="d-flex" id="container">
+    <!-- logout -->
+    <div v-if="loggedOut" class="align-items-center alert alert-danger d-flex" role="alert" style="height: 40px; margin-bottom: 20px;">
+      You have logged out
+    </div>
+    <!-- login -->
     <div id="loginDiv" >
       <div style="margin-top: 50px; margin-left: 225px;">
         <h1 style="display: inline; font-weight:700; color: #5BB95A;">DEEP</h1>
@@ -14,28 +53,28 @@ export default {
       <form>
       <div class="form-group">
         <label for="username">Username <h6 style="display: inline; color: red;">*</h6></label>
-        <input type="text" class="form-control" name="username" id="username" placeholder="Required">
+        <input v-model="username" type="text" class="form-control" name="username" id="username" placeholder="Required">
       </div>
       <div class="form-group">
         <label for="username">Password <h6 style="display: inline; color: red;">*</h6></label>
-        <input type="text" class="form-control" name="password" id="password" placeholder="Required">
+        <input v-model="password" type="text" class="form-control" name="password" id="password" placeholder="Required">
       </div>
       <div class="form-group">
         <input type="checkbox" class="form-check-input" id="remember">
         <label class="form-check-label" for="remember" style="padding-left: 5px; opacity: 0.75;">Remember me</label>
       </div>
       </form>
-      <button id="loginButton" style="color: white; font-weight: 500;">Login</button>
+      <button @click="login" id="loginButton" style="color: white; font-weight: 500;">Login</button>
     </div>
   </div>
 </template>
-<button id="uploadButton" style="color:white; font-weight: 500;">Select Image</button>
 
-<style>
+<style scoped>
+
 #container{
   max-width: 100%;
   height: 100vh;
-  background-image: url('background1 (2).jpg');
+  background-image: url('../assets/loginBG.jpg');
 }
 #loginDiv {
   margin: auto;
