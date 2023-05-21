@@ -1,0 +1,8 @@
+users table: {
+    id TEXT UNIQUE PRIMARY KEY, // generated using uuid()
+    role TEXT NOT NULL, // ['admin', 'doctor']
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL, // hashed using bcrypt
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL 
+}

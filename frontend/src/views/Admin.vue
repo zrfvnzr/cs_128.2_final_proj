@@ -29,15 +29,18 @@ export default {
     <!-- Users Index -->
     <div ref="usersIndexDiv">
         <!-- Users Index Header -->
-        <div class="d-flex justify-content-between mb-2">
-            <div class="d-flex fc-apple">
-                <i class="bi bi-people-fill fs-3 h-1-rem lh-1 me-1"></i>
-                <h1 class="fs-3 fw-bold lh-1 m-0">Admin Dashboard</h1>
+        <div class="header">
+            <div>
+                <i class="bi bi-people-fill"></i>
+                <h1>Admin Dashboard</h1>
             </div>
             <div class="align-items-center d-flex">
                 <input class="h-100 lh-1 me-1 px-1" type="text" placeholder="Search users...">
-                <div class="btn btn-sm btn-success hoverTransform lh-1 p-2">Search</div>
+                <button class="btn btn-sm btn-success hoverTransform lh-1 p-2">Search</button>
             </div>
+            <button class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                Add New User
+            </button>
         </div>
         <!-- end Users Index Header -->
         <!-- Users Index Table -->
@@ -78,10 +81,10 @@ export default {
     <!-- User Edit -->
     <div ref="userEditDiv">
         <!-- User Edit Header -->
-        <div class="d-flex justify-content-between mb-2">
-            <div class="d-flex fc-apple">
-                <i class="bi bi-person-fill-gear fs-3 h-1-rem lh-1 me-1"></i>
-                <h1 class="fs-3 fw-bold lh-1 m-0">Edit User</h1>
+        <div class="header">
+            <div>
+                <i class="bi bi-person-fill-gear"></i>
+                <h1>Edit User</h1>
             </div>
         </div>
         <!-- end User Edit Header -->
@@ -122,5 +125,32 @@ export default {
 
 </div>
 </template>
+
 <style scoped>
+/* Headers */
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: .5rem;
+}
+    .header > div {
+        display: flex;
+        flex-direction: row;
+        color: var(--apple);
+    }
+        .header > div > i {
+            font-size: 1.5rem;
+            height: 1.5rem;
+            line-height: 1;
+            margin-right: .25rem;
+        }
+        .header > div > h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            line-height: 1;
+            margin: 0;
+        }
+/* end Headers */
+
 </style>

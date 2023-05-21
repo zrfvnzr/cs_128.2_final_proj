@@ -52,7 +52,7 @@ async function configureLocalStrategy(db) {
             passport.use(
                 new LocalStrategy(async function verify(username, password, done) {
                     try {
-                        const getUser = "SELECT * FROM user WHERE username = ?";
+                        const getUser = "SELECT * FROM users WHERE username = ?";
                         const db = await database.openOrCreateDB(dbPath);
                         const result = await database.get(db, getUser, [username], true);
                         if (!result) {
@@ -103,7 +103,7 @@ async function configureLocalStrategy(db) {
 router.post("/api/auth/getAllUsers", async (req, res) => {
     try {
         const db = await database.openOrCreateDB(dbPath);
-        const rows = await database.all(db, `SELECT role, username FROM user ORDER BY role ASC`, [], false);
+        const rows = await database.all(db, `SELECT role, username FROM users ORDER BY role ASC`, [], false);
         res.send(rows);
     } catch (error) {
         console.log("Error on /api/getAllUsers"); // temp
@@ -116,7 +116,13 @@ router.post("/api/auth/getAllUsers", async (req, res) => {
 // authorize
 router.post("/api/auth/authorize", (req, res) => {
     if (req.user) {
-        res.json({ username: req.user.username, role: req.user.role }).send();
+        res.json({
+            id: req.user.id,
+            username: req.user.username,
+            role: req.user.role,
+            first_name: req.user.first_name,
+            last_name: req.user.last_name
+        }).send();
     } else {
         res.status(401).json({ message: "User not logged in" }).send();
     }
@@ -128,14 +134,14 @@ router.post("/api/auth/register", async (req, res) => {
     // check if username already exists
     try {
         const db = await database.openOrCreateDB(dbPath);
-        const row = await database.get(db, `SELECT * FROM user WHERE username = ?`, [req.body.username]);
+        const row = await database.get(db, `SELECT * FROM users WHERE username = ?`, [req.body.username]);
         if (row) {
             // username already exists
             res.status(401).json({ message: "User already exists" }).send();
         } else {
             // insert new user
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const row = await database.run(db, `INSERT INTO user (id, role, username, password) VALUES (?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword]);
+            const row = await database.run(db, `INSERT INTO users (id, role, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword, req.body.first_name, req.body.last_name]);
             res.json({ message: `Register success for user ${req.body.username}` }).send();
         }
     } catch (error) {
