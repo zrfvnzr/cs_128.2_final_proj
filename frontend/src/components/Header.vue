@@ -10,7 +10,7 @@ export default {
         <a href=""><h5 style="display: inline; padding-left: 50px ;">Records</h5></a> 
         <a href="">
                 <div style="display: inline; padding-left: 420px ;">
-                        <h1 style="display: inline; font-weight:500; color: #5BB95A;">DEEP</h1>
+                        <h1 style="display: inline; font-weight:600; color: #5BB95A;">Deep</h1>
                         <h1 style="display: inline; font-weight:700; color: #00A0DC;">DR</h1>
                 </div>
         </a> 
@@ -20,8 +20,8 @@ export default {
 
 <style>
 .headerContainer{
-    max-width: 100%;
-    height: 70px;
+    min-width: 100%;
+    min-height: 70px;
     background-image: url('../assets/headerBG.jpg');
     padding-top: 10px;
     padding-left: 50px;
@@ -50,7 +50,7 @@ a:hover {
 }
 #signoutButton:active {
     background-color: #5BB95A;
-    box-shadow: 0 5px #666;
-    transform: translateY(1px);
+    box-shadow: 3px #666;
+   
 }
 </style>

@@ -123,14 +123,14 @@ export default {
 #upimgHeader{
     background-color: #0072C6;
     border-radius:10px 10px 0px 0px;
-    height: 60px;
+    min-height: 60px;
     padding-top: 15px;
     padding-left: 20px;
     color: #F2F2F2;
 }
 #container{
     max-width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #F2F2F2;
 }
 #uploadImageDIv{
@@ -138,7 +138,7 @@ export default {
     margin: auto;
     margin-top: 20px;
     width: 40%;
-    height: 400px;
+    min-height: 400px;
     background-color: #F2F2F2;
     border-width: 1px;
     border-style: solid;
@@ -150,7 +150,7 @@ export default {
     margin: auto;
     margin-top: 10px;
     width: 60%;
-    height: 275px;
+    min-height: 275px;
     border-radius: 10px;
     background-image: url('emptyimg.jpg');
     background-size: cover;
