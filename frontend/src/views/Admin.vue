@@ -1,30 +1,70 @@
 <script>
 export default {
-  name: 'Admin',
-  data() {
-    return {
-        users: [
-            {
-                id: 1,
-                role: 'admin',
-                username: 'admin1',
-                firstName: 'Paolo',
-                lastName: 'Licup'
-            },
-            {
-                id: 2,
-                role: 'admin',
-                username: 'admin2',
-                firstName: 'Emmanuel',
-                lastName: 'Ednalan'
+    name: 'Admin',
+    data() {
+        return {
+            divRefs: [
+                'usersIndexDiv',
+                'userCreateDiv',
+                'userEditDiv',
+                'sqlConsoleDiv'
+            ],
+            users: [
+                {
+                    id: 1,
+                    role: 'admin',
+                    username: 'admin1',
+                    firstName: 'Paolo',
+                    lastName: 'Licup'
+                },
+                {
+                    id: 2,
+                    role: 'admin',
+                    username: 'admin2',
+                    firstName: 'Emmanuel',
+                    lastName: 'Ednalan'
+                }
+            ]
+        }
+    },
+    beforeRouteEnter (to, from, next) {
+        next(async vm => {
+            await vm.myMounted()
+        })
+    },
+    methods: {
+        async myMounted() {
+            this.hideDivs()
+        },
+        hideDivs() {
+            // initially hide all divs except for usersIndexDiv
+            this.divRefs.forEach(divRef => {
+                if (divRef !== 'usersIndexDiv') {
+                    this.$refs[divRef].style.display = 'none'
+                }
+            })
+        },
+        switchDiv(_fromRef, toRef, _toRefDisplay) {
+            // if fromRef is not specified, hide all divs
+            if (!_fromRef || _fromRef == null) {
+                this.divRefs.forEach(ref => {
+                    this.$refs[ref].style.display = 'none'
+                })
+            } else {
+                this.$refs[fromRef].style.display = 'none'
+            }            
+            // if _toRefDisplay is not specified, default to flex
+            let toRefDisplay = 'flex'
+            if (_toRefDisplay) {
+                toRefDisplay = _toRefDisplay
             }
-        ]
+            this.$refs[toRef].style.display = toRefDisplay
+        }
     }
-  }
 }
 </script>
 <template>
-<div style="padding: 3rem 3rem 0 3rem;">
+<div id="adminMainDiv" style="padding: 3rem 3rem 0 3rem;">
 
     <!-- Users Index -->
     <div ref="usersIndexDiv">
@@ -38,7 +78,7 @@ export default {
                 <input class="h-100 lh-1 me-1 px-1" type="text" placeholder="Search users...">
                 <button class="btn btn-sm btn-success hoverTransform lh-1 p-2">Search</button>
             </div>
-            <button class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+            <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
                 Add New User
             </button>
         </div>
@@ -143,6 +183,11 @@ export default {
     min-height: 5rem;
 }
 /* end TEMP */
+
+/* Main Divs */
+#adminMainDiv > div {
+    flex-direction: column;
+}
 
 /* Headers */
 .header {
