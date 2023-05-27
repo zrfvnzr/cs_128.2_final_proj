@@ -78,9 +78,14 @@ export default {
                 <input class="h-100 lh-1 me-1 px-1" type="text" placeholder="Search users...">
                 <button class="btn btn-sm btn-success hoverTransform lh-1 p-2">Search</button>
             </div>
-            <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
-                Add New User
-            </button>
+            <div class="d-flex" style="gap: 1rem;">
+                <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                    Add New User
+                </button>
+                <button @click="switchDiv(null, 'sqlConsoleDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                    SQL Console
+                </button>
+            </div>
         </div>
         <!-- end Users Index Header -->
         <!-- Users Index Table -->
@@ -105,10 +110,10 @@ export default {
                         <td class="text-capitalize">{{ users[index].firstName }}</td>
                         <td class="text-capitalize">{{ users[index].lastName }}</td>
                         <td>
-                            <div class="btn btn-sm btn-warning hoverTransform">Edit</div>
+                            <button @click="switchDiv(null, 'userEditDiv')" class="btn btn-sm btn-warning hoverTransform">Edit</button>
                         </td>
                         <td>
-                            <div class="btn btn-danger btn-sm hoverTransform">Delete</div>
+                            <button class="btn btn-danger btn-sm hoverTransform">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -126,6 +131,9 @@ export default {
                 <i class="bi bi-person-plus-fill"></i>
                 <h1>Create User</h1>
             </div>
+            <button @click="switchDiv(null, 'usersIndexDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                Back
+            </button>
         </div>
         <!-- end User Create Header -->
         <!-- User Create Body -->
@@ -144,6 +152,9 @@ export default {
                 <i class="bi bi-person-fill-gear"></i>
                 <h1>Edit User</h1>
             </div>
+            <button @click="switchDiv(null, 'usersIndexDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                Back
+            </button>
         </div>
         <!-- end User Edit Header -->
         <!-- User Edit Body -->
@@ -162,6 +173,9 @@ export default {
                 <i class="bi bi-hdd-stack-fill"></i>
                 <h1>SQL Console</h1>
             </div>
+            <button @click="switchDiv(null, 'usersIndexDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                Back
+            </button>
         </div>
         <!-- end SQL Console Header -->
         <!-- SQL Console Body -->
