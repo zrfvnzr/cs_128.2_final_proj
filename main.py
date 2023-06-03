@@ -19,16 +19,28 @@ filename = "copy_model.h5"
 url = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/files/model.h5"
 
 # check if model file exists, else download it
-if not os.path.exists(filename):
-  print(f"{filename} does not exist. Downloading...")
-  def reporthook(count, block_size, total_size):
-    percent = int(count * block_size * 100 / total_size)
-    print(f"Downloading... {percent}%")
-    time.sleep(2)  # add a 0.5 second delay
-  urllib.request.urlretrieve(url, filename, reporthook=reporthook)
-  print(f"{filename} downloaded.")
-else:
-  print(f"{filename} already exists.")
+# if not os.path.exists(filename):
+#   print(f"{filename} does not exist. Downloading...")
+#   def reporthook(count, block_size, total_size):
+#     percent = int(count * block_size * 100 / total_size)
+#     print(f"Downloading... {percent}%")
+#     time.sleep(2)  # add a 0.5 second delay
+#   urllib.request.urlretrieve(url, filename, reporthook=reporthook)
+#   print(f"{filename} downloaded.")
+# else:
+#   print(f"{filename} already exists.")
+
+import requests
+
+# URL2 = "https://fastupload.io/Wimc37GTWGzvwto/file"
+URL = "https://github.com/zrfvnzr/cs_128.2_final_proj/raw/files/model.h5"
+FILE_TO_SAVE_AS = "copy_model.h5" # the name you want to save file as
+
+
+resp = requests.get(URL) # making requests to server
+
+with open(FILE_TO_SAVE_AS, "wb") as f: # opening a file handler to create new file 
+    f.write(resp.content) # writing content to file
 
 # we need to define f1_score and pass it in custom_objects to load the model properly
 def f1_score(y_true, y_pred):
