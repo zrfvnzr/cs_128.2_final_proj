@@ -3,12 +3,29 @@ export default {
     name: 'Admin',
     data() {
         return {
+            createUserObj: {
+                role: '',
+                username: '',
+                password: '',
+                confirmPassword: '',
+                firstName: '',
+                lastName: ''
+            },
             divRefs: [
                 'usersIndexDiv',
                 'userCreateDiv',
                 'userEditDiv',
                 'sqlConsoleDiv'
             ],
+            editUserObj: {
+                id: 0,
+                role: '',
+                username: '',
+                newPassword: '',
+                confirmNewPassword: '',
+                firstName: '',
+                lastName: ''
+            },
             users: [
                 {
                     id: 1,
@@ -34,7 +51,55 @@ export default {
     },
     methods: {
         async myMounted() {
+            try {
+                await this.getUsers()
+            } catch(error) {
+                console.error(error)
+            }
             this.hideDivs()
+        },
+        async createUser() {
+            try {
+                const response = await this.axios.post('/api/users/create', this.createUserObj)
+                alert('User created')
+                this.switchDiv(null, 'usersIndexDiv')
+            } catch (error) {
+                alert(error.response.body.message)
+            }
+        },
+        async deleteUser(user) {
+            try {
+                if (confirm('Delete user?')) {
+                    const response = await this.axios.post('/api/users/delete', user)
+                    alert('User deleted')
+                    this.getUsers()
+                } else {
+                    return
+                }
+            } catch (error) {
+                alert(error.response.body.message)
+            }       
+        },
+        async editUser() {
+            try {
+                const response = await this.axios.post('/api/users/update', this.editUserObj)
+                alert('User updated')
+                this.switchDiv(null, 'usersIndexDiv')
+            } catch (error) {
+                alert(error.response.body.message)
+            }
+        },
+        editUserDiv(user) {
+            this.editUserObj = user
+            this.switchDiv(null, 'userEditDiv')
+        },
+        async getUsers() {
+            try {
+                const response = await this.axios.post('/api/users/index')
+                this.users = response.data.rows
+            } catch (error) {
+                alert(error.response.body.message)
+            }
         },
         hideDivs() {
             // initially hide all divs except for usersIndexDiv
@@ -76,7 +141,7 @@ export default {
             </div>
             <div class="align-items-center d-flex">
                 <input class="h-100 lh-1 me-1 px-1" type="text" placeholder="Search users...">
-                <button class="btn btn-sm btn-success hoverTransform lh-1 p-2">Search</button>
+                <button class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Search</button>
             </div>
             <div class="d-flex" style="gap: 1rem;">
                 <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
@@ -110,10 +175,10 @@ export default {
                         <td class="text-capitalize">{{ users[index].firstName }}</td>
                         <td class="text-capitalize">{{ users[index].lastName }}</td>
                         <td>
-                            <button @click="switchDiv(null, 'userEditDiv')" class="btn btn-sm btn-warning hoverTransform">Edit</button>
+                            <button @click="editUserDiv(this.users[index])" class="btn btn-sm btn-warning fw-bold hoverTransform">Edit</button>
                         </td>
                         <td>
-                            <button class="btn btn-danger btn-sm hoverTransform">Delete</button>
+                            <button @click="deleteUser(this.users[index])" class="btn btn-danger btn-sm fw-bold hoverTransform">Delete</button>
                         </td>
                     </tr>
                 </tbody>
@@ -137,8 +202,24 @@ export default {
         </div>
         <!-- end User Create Header -->
         <!-- User Create Body -->
-        <div class="temp-body">
-
+        <div class="main-div">
+            <label for="role">Role</label>
+            <select v-model="createUserObj.role" name="role">
+                <option value="">-- Select one --</option>
+                <option value="admin">Admin</option>
+                <option value="doctor">Doctor</option>
+            </select>
+            <label for="username">Username</label>
+            <input v-model="createUserObj.username" type="text" name="username">
+            <label for="password">Password</label>
+            <input v-model="createUserObj.password" type="password" name="password">
+            <label for="confirmPassword">Confirm Password</label>
+            <input v-model="createUserObj.confirmPassword" type="password" name="confirmPassword">
+            <label for="firstName">First Name</label>
+            <input v-model="createUserObj.firstName" type="text" name="firstName">
+            <label for="lastName">Last Name</label>
+            <input v-model="createUserObj.lastName" type="text" name="lastName">
+            <button @click="createUser" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Register</button>
         </div>
         <!-- end User Create Body -->
     </div>
@@ -158,8 +239,26 @@ export default {
         </div>
         <!-- end User Edit Header -->
         <!-- User Edit Body -->
-        <div class="temp-body">
-
+        <div class="main-div">
+            <label for="id">ID</label>
+            <input disabled v-model="editUserObj.id" type="text" name="id">
+            <label for="role">Role</label>
+            <select v-model="editUserObj.role" name="role">
+                <option value="">-- Select one --</option>
+                <option value="admin">Admin</option>
+                <option value="doctor">Doctor</option>
+            </select>
+            <label for="username">Username</label>
+            <input v-model="editUserObj.username" type="text" name="username">
+            <label for="password">New Password</label>
+            <input v-model="editUserObj.newPassword" type="password" name="password">
+            <label for="confirmPassword">Confirm New Password</label>
+            <input v-model="editUserObj.confirmNewPassword" type="password" name="confirmPassword">
+            <label for="firstName">First Name</label>
+            <input v-model="editUserObj.firstName" type="text" name="firstName">
+            <label for="lastName">Last Name</label>
+            <input v-model="editUserObj.lastName" type="text" name="lastName">
+            <button @click="editUser" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Register</button>
         </div>
         <!-- end User Edit Body -->
     </div>
@@ -201,6 +300,25 @@ export default {
 /* Main Divs */
 #adminMainDiv > div {
     flex-direction: column;
+}
+.main-div {
+    align-items: start;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    min-height: 5rem;
+    padding: 3rem;
+}
+
+/* Labels */
+label {
+    font-weight: bold;
+}
+
+/* Inputs */
+.main-div > input, .main-div > select {
+    margin-bottom: 1rem;
 }
 
 /* Headers */
