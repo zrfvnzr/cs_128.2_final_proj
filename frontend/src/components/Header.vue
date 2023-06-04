@@ -1,44 +1,80 @@
 <script>
+// import router from './main.js'
 export default {
-        name: 'Header'
+    name: 'Header',
+    methods: {
+        goToRecords() {
+            location.href = '/records'
+        },
+        goToPredictor() {
+            location.href = '/predictor'
+        },
+        async signoutButton(){
+            try {            
+                await router.post("/api/auth/logout");
+                this.$router.push("/login?loggedOut=1");
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    }
 }
+
 </script>
 
 <template>
 <div class="headerContainer">
-        <a href=""><h5 style="display: inline;">Predictor</h5></a> 
-        <a href=""><h5 style="display: inline; padding-left: 50px ;">Records</h5></a> 
-        <a href="">
-                <div style="display: inline; padding-left: 420px ;">
-                        <h1 style="display: inline; font-weight:600; color: #5BB95A;">Deep</h1>
-                        <h1 style="display: inline; font-weight:700; color: #00A0DC;">DR</h1>
-                </div>
-        </a> 
-        <button id="signoutButton" style="color: white">Sign Out</button>
+    <div class="leftHeader" style="">
+        <a @click="goToPredictor" href="#"><h5 style="display: inline;">Predictor</h5></a> 
+        <a @click="goToRecords" href="#"><h5 style="display: inline; padding-left: 50px ;">Records</h5></a> 
+    </div>
+    <a href="">
+            <div class="midheader" style="">
+                    <h1 style="display: inline; font-weight:600; color: #5BB95A;">Deep</h1>
+                    <h1 style="display: inline; font-weight:700; color: #00A0DC;">DR</h1>
+            </div>
+    </a> 
+    <button id="signoutButton" style="color: white;">Log Out</button>
 </div>
 </template>
 
 <style>
+.leftHeader {
+    display:inline; 
+    float: left;
+    margin-top:  20px;
+}
+.midheader{
+    display: inline;
+    position: relative;
+}
 .headerContainer{
     min-width: 100%;
-    min-height: 70px;
-    background-image: url('../assets/headerBG.jpg');
-    padding-top: 10px;
-    padding-left: 50px;
+    min-height: 60px;
+    background-image: url('headerBG.png');
+    background-size: contain;
     color: black;
+    text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 a {
+    margin-top:  20px;
     color: black;
     text-decoration: none;
+    position: static;
 }
+
 a:hover {
     color: #5BB95A;
     background-color: transparent;
     text-decoration: none;
 }
 #signoutButton {
-    margin-left: 470px; 
+    display: inline;
     position: relative; 
+    float: right;
+    margin-top: 20px;
     font-size: 15px; 
     width: 10%;
     background-color: #8BC34A;

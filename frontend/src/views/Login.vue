@@ -2,37 +2,31 @@
 export default {
     name: 'Login',
     computed: {
-      loggedOut(){
-        return (location.search === 'toLoggedOut')
-      }
+      // loggedOut(){
+      //   return (location.search === 'toLoggedOut')
+      // }
     },
     data () {
       return {
         username: '',
         password: '',
+        message: ''
       }
     },
     async mounted(){
     },
     methods: {
       async login(){
-        router.post("/api/auth/login", (req, res) => {
-          passport.authenticate("local", (err, user, info, status) => {
-              if (user) {
-                  req.logIn(user, (err) => {
-                      if (err) {
-                          console.log("Error on req.logIn"); // temp
-                          console.log(err);
-                          res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
-                      } else {
-                          res.json({ messsage: "Login success", role: user.role }).send();
-                      }
-                  });
-              } else {
-                  res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
-              }
-          })(req, res);
-      });
+        try {
+          const response = await router.post("/api/auth/login", {
+          username: this.username,
+          password: this.password
+        },
+        alert('this button is clicked'))
+        this.message = response.data.message;
+        } catch (error) {
+          this.message = "Log in unsuccessful";
+        }
     }
   }
 }
@@ -46,7 +40,7 @@ export default {
     </div>
     <!-- login -->
     <div id="loginDiv" >
-      <div style="margin-top: 50px; margin-left: 225px;">
+      <div style="margin-top: 50px; text-align: center;">
         <h1 style="display: inline; font-weight:700; color: #5BB95A;">DEEP</h1>
         <h1 style="display: inline; font-weight:800; color: #00A0DC;">DR</h1>
       </div>
@@ -56,7 +50,7 @@ export default {
         <input v-model="username" type="text" class="form-control" name="username" id="username" placeholder="Required">
       </div>
       <div class="form-group">
-        <label for="username">Password <h6 style="display: inline; color: red;">*</h6></label>
+        <label for="username">Password <h6 style="display: inline; color: red; ">*</h6></label>
         <input v-model="password" type="text" class="form-control" name="password" id="password" placeholder="Required">
       </div>
       <div class="form-group">
@@ -64,7 +58,7 @@ export default {
         <label class="form-check-label" for="remember" style="padding-left: 5px; opacity: 0.75;">Remember me</label>
       </div>
       </form>
-      <button @click="login" id="loginButton" style="color: white; font-weight: 500;">Login</button>
+      <button onclick="login()" id="loginButton" style="color: white; font-weight: 500;">Login</button>
     </div>
   </div>
 </template>
@@ -75,12 +69,14 @@ export default {
   max-width: 100%;
   height: 100vh;
   background-image: url('../assets/loginBG.jpg');
+  text-align: center;
+  overflow: hidden;
 }
 #loginDiv {
   margin: auto;
   margin-top: 120px;
   width: 40%;
-  height: 500px;
+  min-height: 500px;
   background-color: #F2F2F2;
   border-width: 1px;
   border-style: solid;
@@ -88,15 +84,11 @@ export default {
   border-color:#0072C6 ;
 }
 #loginButton {
-  margin-left: 240px; 
   font-size: 15px; 
   width: 20%;
   background-color: #8BC34A;
   border-radius: 5px;
   border-color:  #C7C7CC;
-  justify-content: center;
-  align-items: center;
-  display: flex;
   margin-top: 5%;
 }
 #loginButton:hover{
@@ -108,22 +100,25 @@ export default {
   transform: translateY(1px);
 }
 .form-group{
-  margin-top: 30px;
-  margin-left: 100px;
-
+  margin-top: 40px;
+}
+.form-control{
+  max-width:80% ;
 }
 input[type=text]{
   border-width: 1px;
   border-style: solid;
   border-radius: 6px;
   border-color:#5BB95A ;
+  box-sizing: border-box;
   width: 400px;
+  margin-right: 30px;
+  
 }
 input[type=text]::-webkit-input-placeholder{
   opacity: 0.5;
 }
 input[type=checkbox]{
-  background-color: #D9D9D9;
+  background-color:#5BB95A;
 }
-
 </style>

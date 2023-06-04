@@ -152,7 +152,7 @@ export default {
     width: 60%;
     min-height: 275px;
     border-radius: 10px;
-    background-image: url('emptyimg.jpg');
+    /* background-image: url('emptyimg.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
