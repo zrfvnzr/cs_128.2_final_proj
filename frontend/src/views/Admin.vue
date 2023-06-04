@@ -26,6 +26,10 @@ export default {
                 firstName: '',
                 lastName: ''
             },
+            sql: {
+                result: '',
+                statement: ''
+            },
             users: [
                 {
                     id: 1,
@@ -92,6 +96,15 @@ export default {
         editUserDiv(user) {
             this.editUserObj = user
             this.switchDiv(null, 'userEditDiv')
+        },
+        async executeSql() {
+            try {
+                const response = await this.axios.post('/api/sql', this.sql.statement)
+                this.sql.result = response.data.result
+                alert('SQL statement executed')
+            } catch (error) {
+                alert(error.response.body.message)
+            }
         },
         async getUsers() {
             try {
@@ -278,8 +291,12 @@ export default {
         </div>
         <!-- end SQL Console Header -->
         <!-- SQL Console Body -->
-        <div class="temp-body">
-
+        <div class="main-div">
+            <label for="sqlStatement">SQL Statement</label>
+            <textarea v-model="this.sql.statement" cols="70" rows="5"></textarea>
+            <button @click="executeSql()" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 mb-3 p-2">Execute</button>
+            <label for="sqlResult">SQL Result</label>
+            <textarea disabled v-model="this.sql.result" cols="70" rows="5"></textarea>
         </div>
         <!-- end SQL Console Body -->
     </div>
@@ -317,7 +334,7 @@ label {
 }
 
 /* Inputs */
-.main-div > input, .main-div > select {
+.main-div > input, .main-div > select, .main-div > textarea {
     margin-bottom: 1rem;
 }
 
