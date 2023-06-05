@@ -106,8 +106,10 @@ export default {
 }
 
 .avatar {
-    width: 150px; /* Adjust the size of the avatar */
+    width: 150px; 
     height: 150px;
+    margin-bottom: 1in;
+
 }
 
 .avatar img {
@@ -118,12 +120,10 @@ export default {
 }
 
 .avatar-name{
-    display: inline-block;
     font-size: 16px;
     font-weight: bold;
     margin-top: 10px;
     text-align: center;
-    white-space: inherit;
     line-height: 19px;
 }
 
@@ -133,5 +133,7 @@ export default {
     margin-top: -20px;
     margin-bottom: 10px;
 }
+
+
 
 </style>

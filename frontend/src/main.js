@@ -15,7 +15,7 @@ import Header from './components/Header.vue'
 const routes = [
 //   {path: '/', component: Home}
     {path: '/admin', component: Admin},
-    {path: '/home', component: Home, Header},
+    {path: '/', component: Home},
 ]
 
 const router = createRouter({
