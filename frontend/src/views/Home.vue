@@ -1,13 +1,15 @@
 <script>
 import Header from '../components/Header.vue'
+import Loading from '../components/Loading.vue'
 export default {
     name: 'Home',
-    components: {Header}
+    components: {Header, Loading}
 }
 </script>
 
 <template>
     <div>
+        <Loading />
         <div class="centered-div background-cover">
             <Header></Header>
             <h1 id="app-title">Deep<span id="app-title-dr">DR</span></h1>
@@ -17,7 +19,7 @@ export default {
         </div>
         <div class="centered-div">
             <h1 id="creators-style">CREATORS</h1>
-            <div class="avatar-group">
+            <div class="avatar-group flex-wrap">
                 <div class="avatar">
                     <img src="../components/seth.jpg" alt="Paolo Licup">
                     <p class="avatar-name">JOHN PAOLO LICUP</p>
@@ -53,7 +55,6 @@ export default {
 .centered-div{
     display: flex;
     flex-direction: column;
-    justify-content: top;
     align-items: center;
 }
 
@@ -106,15 +107,16 @@ export default {
 }
 
 .avatar {
-    width: 150px; 
-    height: 150px;
+    display: flex;
+    flex-direction: column;
+    width: 250px; 
     margin-bottom: 1in;
-
 }
 
 .avatar img {
-    width: 100%;
-    height: 100%;
+    width: 150px;
+    height: 150px;
+    align-self: center;
     border-radius: 50%;
 
 }
@@ -133,7 +135,5 @@ export default {
     margin-top: -20px;
     margin-bottom: 10px;
 }
-
-
 
 </style>
