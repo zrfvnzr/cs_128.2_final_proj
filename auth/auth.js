@@ -8,17 +8,18 @@
     uuid
 */
 
-const bcrypt = require("bcrypt");
-const passport = require("passport");
-const database = require("../database/database");
-const express = require("express");
-const LocalStrategy = require("passport-local");
-const router = express.Router();
-const session = require("express-session");
-const SQLiteStore = require("connect-sqlite3")(session);
-const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt")
+const passport = require("passport")
+const database = require("../database/database")
+const express = require("express")
+const LocalStrategy = require("passport-local")
+const router = express.Router()
+const session = require("express-session")
+const SQLiteStore = require("connect-sqlite3")(session)
+const { v4: uuidv4 } = require("uuid")
 
-let dbPath = "../auth/auth.sqlite";
+let dbPath = "../auth/auth.sqlite"
+let authDb
 
 async function main(app, db, db_path) {
     return new Promise(async (resolve, reject) => {
@@ -32,9 +33,10 @@ async function main(app, db, db_path) {
                     store: new SQLiteStore({ db: "session.db", dir: "./auth" }),
                 })
             );
+            authDb = db
             app.use(passport.initialize());
             app.use(passport.session());
-            await configureLocalStrategy(db);
+            await configureLocalStrategy(authDb);
             app.use(router);
             resolve();
         } catch (error) {
@@ -102,8 +104,7 @@ async function configureLocalStrategy(db) {
 // get all users
 router.post("/api/auth/getAllUsers", async (req, res) => {
     try {
-        const db = await database.openOrCreateDB(dbPath);
-        const rows = await database.all(db, `SELECT role, username FROM users ORDER BY role ASC`, [], false);
+        const rows = await database.all(authDb, `SELECT role, username, first_name, last_name FROM users ORDER BY role ASC`, [], false);
         res.send(rows);
     } catch (error) {
         console.log("Error on /api/getAllUsers"); // temp
@@ -130,25 +131,53 @@ router.post("/api/auth/authorize", (req, res) => {
 // end authorize
 
 // register
-router.post("/api/auth/register", async (req, res) => {
+router.post("/api/users/create", async (req, res) => {
     // check if username already exists
     try {
-        const db = await database.openOrCreateDB(dbPath);
-        const row = await database.get(db, `SELECT * FROM users WHERE username = ?`, [req.body.username]);
+        const row = await database.get(authDb, `SELECT * FROM users WHERE username = ?`, [req.body.username])
         if (row) {
             // username already exists
-            res.status(401).json({ message: "User already exists" }).send();
+            res.status(401).json({ message: "User already exists" }).send()
         } else {
             // insert new user
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const row = await database.run(db, `INSERT INTO users (id, role, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword, req.body.first_name, req.body.last_name]);
-            res.json({ message: `Register success for user ${req.body.username}` }).send();
+            const hashedPassword = await bcrypt.hash(req.body.password, 10)
+            const row = await database.run(authDb, `INSERT INTO users (id, role, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword, req.body.first_name, req.body.last_name])
+            res.json({ message: `Register success for user ${req.body.username}` }).send()
         }
     } catch (error) {
-        res.status(401).json({ message: error }).send();
+        res.status(401).json({message: error}).send()
     }
 });
 // end register
+
+// delete user
+router.post("/api/users/delete", async (req, res) => {
+    try {
+        await database.run(authDb, `DELETE FROM users WHERE id = ?`, req.body.id)
+        res.status(200).json({message: 'User deleted'}).send()
+    } catch (error) {
+        res.status(401).json({message: error}).send()
+    }
+})
+// end delete user
+
+// edit user
+router.post("/api/users/edit", async (req, res) => {
+    try {
+        const row = await database.get(authDb, `SELECT * FROM users WHERE id = ?`, [req.body.id])
+        if (!row) {
+            throw 'No user found'
+        } else {
+            await database.run(authDb, `UPDATE users SET role = ?, username = ?, firstName = ?, lastName = ?, password = ? WHERE id = ?`, [
+                req.body.role, req.body.username, req.body.firstName, req.body.lastName, bcrypt.hash(req.body.newPassword, 10), req.body.id
+            ])
+            res.status(200).json({message: 'User updated'}).send()
+        }
+    } catch (error) {
+        res.status(401).json({message: error}).send()
+    }
+})
+// end edit user
 
 // login
 router.post("/api/auth/login", (req, res) => {
@@ -190,6 +219,17 @@ router.get("/toLoggedOut", (req, res) => {
     res.redirect("/login?loggedOut=1");
 });
 // end logout redirect
+
+// sql console
+router.post("/api/sql", async (req, res) => {
+    try {
+        const response = await database.run(authDb, req.body.statement)
+        res.status(200).json({result: response}).send()
+    } catch (error) {
+        res.status(401).json({message: error}).send()
+    }
+})
+// end sql console
 
 // end Routes
 
