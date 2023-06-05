@@ -41,7 +41,7 @@ export default {
     <!-- login -->
     <div id="loginDiv" >
       <div style="margin-top: 50px; text-align: center;">
-        <h1 style="display: inline; font-weight:700; color: #5BB95A;">DEEP</h1>
+        <h1 style="display: inline; font-weight:700; color: #5BB95A;">Deep</h1>
         <h1 style="display: inline; font-weight:800; color: #00A0DC;">DR</h1>
       </div>
       <form>
@@ -70,7 +70,7 @@ export default {
   height: 100vh;
   background-image: url('../assets/loginBG.jpg');
   text-align: center;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 #loginDiv {
   margin: auto;

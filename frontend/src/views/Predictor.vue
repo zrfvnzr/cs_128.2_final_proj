@@ -1,5 +1,6 @@
 <script>
 import Header from '../components/Header.vue'
+// import router from '../main.js'
 export default {
         name: 'Predictor',
         components: {Header},
@@ -15,7 +16,8 @@ export default {
                     email: '',
                     contact: null,
                     physician: '',
-                }
+                },
+                fundusIMG: null,
             }
         },
         methods: {
@@ -43,13 +45,29 @@ export default {
             },
             // SELECT IMAGE 
             uploadImage(){
-                let patientImage = document.createElement('input');
+                this.$refs.fileInput.click();
 
+            },
+            handleFileSelect(event){
+                const file = event.target.files[0];
+                const fileReader = new FileReader();
+                fileReader.onload = (e) => {
+                    this.fundusIMG = e.target.result;
+                }
+                fileReader.readAsDataURL(file);
             },
             // PREDICTOR
             predict(){
 
+            },
+            async signoutButton(){
+            try {            
+                await router.post("/api/auth/logout");
+                this.$router.push("/login?loggedOut=1");
+            } catch (error) {
+                console.log(error)
             }
+        }
         }
 }
 </script>
@@ -58,7 +76,7 @@ export default {
 <Header />
     <div class="" id="container">
         <div class="patientInformation">
-            <form class="row" style="padding: 10px;">
+            <form class="row" style="">
                 <div class="col-md" style="width: 20%;">
                         <label for="lastName">Last Name <h6 style="display: inline; color: red;">*</h6></label>
                         <input v-model="patient.lastName" type="text" class="form-control" name="lastName" id="lastName" placeholder="">
@@ -71,9 +89,9 @@ export default {
                     <label for="middleName">Middle Name</label>
                     <input v-model="patient.middleName" type="text" class="form-control" name="middleName" id="middleName" placeholder="  ">
                 </div>
-                <div class="col-md">
-                    <label for="sex" style="padding-right: 10px;">Sex <h6 style="display: inline; color: red;">*</h6></label>
-                    <div class="form-check form-check" >
+                <div class="col-md" style="margin-top: 20px;">
+                    <!-- <label for="sex" style="padding-right: 10px;">Sex <h6 style="display: inline; color: red;">*</h6></label> -->
+                    <div class="form-check form-check-inline" >
                         <input v-model="patient" :value="'male'" class="form-check-input" type="radio" name="sex" id="male">
                         <label class="form-check-label" for="male">Male</label>
                     </div>
@@ -83,7 +101,7 @@ export default {
                     </div>
                 </div>
             </form>
-            <form class="row" style="padding: 10px">
+            <form class="row" style="">
                 <div class="col-md" style="width: 20%;">
                         <label for="birthDate">Date of Birth <h6 style="display: inline; color: red;">*</h6></label>
                         <input v-model="patient.birthDate" type="text" class="form-control" name="birthDate" id="birthDate" placeholder="">
@@ -108,60 +126,71 @@ export default {
         </div>
         <div id="uploadImageDIv" >
             <div id="upimgHeader">
-                <h5 style="display: inline;"><i class="bi bi-card-image" style="padding-right: 5px;"></i>Upload Image</h5>
-                <button onclick="uploadImage()" id="uploadButton" style="color: white">Select Image</button>
+                <h5 style="display: inline; float: left;"><i class="bi bi-card-image" style="padding-right: 5px"></i>Upload Image</h5>
+                <button @click="uploadImage" id="uploadButton" style="color: white">Select Image</button>
+                <input type="file" ref="fileInput" style="display: none" accept="image/*" @change="handleFileSelect">
             </div>
             <div id="imageDiv" >
+                <img :src="fundusIMG" v-if="fundusIMG" alt="Uploaded Image">
             </div>
-            <button onclick="predictImage(); saveInfo()" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
+            <button @click="predictImage, saveInfo" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
         </div>
     </div>
 
 </template>
 
 <style>
-#upimgHeader{
+    .patientInformation{
+        margin: 10px;
+    }
+    #container{
+        max-width: 100%;
+        min-height: 100vh;
+        background-color: #F2F2F2;
+    }
+    #uploadImageDIv{
+        margin: auto;
+        margin-top: 20px;
+        max-width: 40%;
+        min-height: 400px;
+        background-color: #F2F2F2;
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 10px;
+        border-color:#0072C6 ;
+        text-align: center;
+    }
+    #upimgHeader{
     background-color: #0072C6;
     border-radius:10px 10px 0px 0px;
     min-height: 60px;
     padding-top: 15px;
-    padding-left: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
     color: #F2F2F2;
-}
-#container{
-    max-width: 100%;
-    min-height: 100vh;
-    background-color: #F2F2F2;
-}
-#uploadImageDIv{
-    display: block;
-    margin: auto;
-    margin-top: 20px;
-    width: 40%;
-    min-height: 400px;
-    background-color: #F2F2F2;
-    border-width: 1px;
-    border-style: solid;
-    border-radius: 10px;
-    border-color:#0072C6 ;
+    min-width: 100%;
     }
     #imageDiv{
-    display: block;
     margin: auto;
     margin-top: 10px;
     width: 60%;
-    min-height: 275px;
+    height: 275px;
     border-radius: 10px;
-    /* background-image: url('emptyimg.jpg'); */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    overflow: hidden;
+    }
+    #imageDiv img{
+        width: 100%;
+        height: 100%;
+        display: block;
     }
     #uploadButton {
-        margin-left: 285px; 
+        display: inline;
         position: relative; 
+        float: right;
+        /* margin-top: 15px;
+        margin-right: 20px ; */
         font-size: 15px; 
-        width: 20%;
+        min-width: 20%;
         background-color: #8BC34A;
         border-radius: 5px;
         border-color:  #C7C7CC;
@@ -175,11 +204,10 @@ export default {
         transform: translateY(1px);
     }
     #predictButton {
-        margin-left: 250px; 
         position: relative; 
-        top: 2%;
+        margin-top: 1%;
         font-size: 15px; 
-        width: 20%;
+        min-width: 20%;
         background-color: #8BC34A;
         border-radius: 5px;
         border-color:  #C7C7CC;
@@ -197,5 +225,5 @@ export default {
     border-style: solid;
     border-radius: 6px;
     border-color:#5BB95A ;
-}
+    }
 </style>

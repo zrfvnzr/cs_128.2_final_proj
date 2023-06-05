@@ -1,5 +1,5 @@
 <script>
-// import router from './main.js'
+
 export default {
     name: 'Header',
     methods: {
@@ -9,6 +9,9 @@ export default {
         goToPredictor() {
             location.href = '/predictor'
         },
+        goToHome(){
+            location.href = './home'
+        },       
         async signoutButton(){
             try {            
                 await router.post("/api/auth/logout");
@@ -25,11 +28,12 @@ export default {
 <template>
 <div class="headerContainer">
     <div class="leftHeader" style="">
-        <a @click="goToPredictor" href="#"><h5 style="display: inline;">Predictor</h5></a> 
-        <a @click="goToRecords" href="#"><h5 style="display: inline; padding-left: 50px ;">Records</h5></a> 
+        <a @click="goToHome" href="#"><h5 style="display: inline;">Home</h5></a> 
+        <a @click="goToPredictor" href="#"><h5 style="display: inline; margin-left: 30px ;">Predictor</h5></a> 
+        <a @click="goToRecords" href="#"><h5 style="display: inline; margin-left: 30px ;">Records</h5></a> 
     </div>
     <a href="">
-            <div class="midheader" style="">
+            <div class="midheader" style="padding-right: 30px;">
                     <h1 style="display: inline; font-weight:600; color: #5BB95A;">Deep</h1>
                     <h1 style="display: inline; font-weight:700; color: #00A0DC;">DR</h1>
             </div>
@@ -52,7 +56,7 @@ export default {
     min-width: 100%;
     min-height: 60px;
     background-image: url('headerBG.png');
-    background-size: contain;
+    background-size: cover;
     color: black;
     text-align: center;
     padding-left: 20px;
