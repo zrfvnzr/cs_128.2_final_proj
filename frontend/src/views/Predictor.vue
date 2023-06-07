@@ -18,6 +18,8 @@ export default {
                     physician: '',
                 },
                 fundusIMG: null,
+                patientID: null, //pero ito diba auto-generatedonce nasave sa database pati
+                dateExamined: Date, // ito diba
             }
         },
         methods: {
