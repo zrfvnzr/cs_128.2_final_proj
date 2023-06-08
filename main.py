@@ -8,6 +8,8 @@ import os
 import cv2
 import urllib.request
 import time
+from flask_cors import CORS
+
 # import warnings
 # warnings.filterwarnings('ignore')
 
@@ -111,6 +113,7 @@ from flask import Flask, jsonify, request
 import io
 
 app = Flask(__name__)
+CORS(app)
 
 print('Flask running!')
 
