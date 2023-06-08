@@ -13,7 +13,7 @@ export default {
         })
     },
     async mounted() {
-        // await this.myMounted()
+        await this.myMounted()
     },
     methods: {
         async myMounted() {
