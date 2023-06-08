@@ -1,6 +1,6 @@
 <script>
 export default {
-        name: Header
+        name: "Header"
 }
 </script>
 
@@ -24,7 +24,7 @@ export default {
 .container{
     max-width: 100%;
     height: 90px;
-    background-image: url('background1 (2).jpg');
+    background-image: url();
 }
 a {
     color: black;
