@@ -11,6 +11,8 @@ import time
 # import warnings
 # warnings.filterwarnings('ignore')
 
+print("Starting main.py")
+
 img_w, img_h = 225, 225
 # model_path = './model.h5'
 model_path = './copy_model.h5'
