@@ -46,6 +46,28 @@ async function createInitialRows(db) {
         ], true)
         // end admin
     // end users
+    // records
+        await database.run(db, `
+            INSERT INTO records (
+                id, date_examined, first_name, middle_name, last_name, sex, birthday, age, email, contact_number, assigned_physician, result
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+            )
+        `, [
+            uuidv4(),
+            Date.now(),
+            'John Paolo',
+            'Mercado',
+            'Licup',
+            'Male',
+            'May 10 2000',
+            '23',
+            'jmlicup@up.edu.ph',
+            '09560097819',
+            'Doc Will',
+            'With Diabetic Retinopathy'
+        ])
+    // end records
 }
 
 module.exports = {createInitialTables, createInitialRows}

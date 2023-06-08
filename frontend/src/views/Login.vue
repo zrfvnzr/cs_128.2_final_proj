@@ -8,7 +8,13 @@ export default {
             }
         },
         async mounted(){
+            await this.myMounted()
         },
+        beforeRouteEnter (to, from, next) {
+            next(async vm => {
+                await vm.myMounted()
+            })
+        },        
         methods: {
             async login() {
                 try {
@@ -21,7 +27,10 @@ export default {
                     console.log(error)
                     alert(error.response.data.message)
                 }
-        }
+            },
+            async myMounted() {
+                await this.authorize()
+            }
     }
 }
 </script>
