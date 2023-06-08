@@ -29,6 +29,12 @@ async function main() {
     app.use(auth.router)
     // end Auth Module
 
+    // Records Module
+    const records = require('./records/records')
+    await records.main(app, authDb, './auth/auth.sqlite')
+    app.use(records.router)
+    // end Records Module
+
     // Serving frontend
     const path = require('path');
     app.use(express.static(path.join(__dirname, 'dist')))

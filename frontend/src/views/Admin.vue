@@ -33,20 +33,6 @@ export default {
                 statement: ''
             },
             users: [
-                {
-                    id: 1,
-                    role: 'admin',
-                    username: 'admin1',
-                    firstName: 'Paolo',
-                    lastName: 'Licup'
-                },
-                {
-                    id: 2,
-                    role: 'admin',
-                    username: 'admin2',
-                    firstName: 'Emmanuel',
-                    lastName: 'Ednalan'
-                }
             ]
         }
     },
@@ -68,6 +54,7 @@ export default {
             try {
                 const response = await this.axios.post('/api/users/create', this.createUserObj)
                 alert('User created')
+                await this.getUsers()
                 this.switchDiv(null, 'usersIndexDiv')
             } catch (error) {
                 alert(error.response.body.message)
@@ -88,7 +75,7 @@ export default {
         },
         async editUser() {
             try {
-                const response = await this.axios.post('/api/users/update', this.editUserObj)
+                const response = await this.axios.post('/api/users/edit', this.editUserObj)
                 alert('User updated')
                 this.switchDiv(null, 'usersIndexDiv')
             } catch (error) {
@@ -101,7 +88,7 @@ export default {
         },
         async executeSql() {
             try {
-                const response = await this.axios.post('/api/sql', this.sql.statement)
+                const response = await this.axios.post('/api/sql', this.sql)
                 this.sql.result = response.data.result
                 alert('SQL statement executed')
             } catch (error) {
@@ -110,7 +97,7 @@ export default {
         },
         async getUsers() {
             try {
-                const response = await this.axios.post('/api/users/index')
+                const response = await this.axios.post('/api/auth/getAllUsers')
                 this.users = response.data.rows
             } catch (error) {
                 alert(error.response.body.message)
@@ -158,9 +145,9 @@ export default {
                 <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
                     Add New User
                 </button>
-                <button @click="switchDiv(null, 'sqlConsoleDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
+                <!-- <button @click="switchDiv(null, 'sqlConsoleDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
                     SQL Console
-                </button>
+                </button> -->
             </div>
         </div>
         <!-- end Users Index Header -->
@@ -183,8 +170,8 @@ export default {
                         <th scope="row">{{ users[index].id }}</th>
                         <td class="text-capitalize">{{ users[index].role }}</td>
                         <td>{{ users[index].username }}</td>
-                        <td class="text-capitalize">{{ users[index].firstName }}</td>
-                        <td class="text-capitalize">{{ users[index].lastName }}</td>
+                        <td class="text-capitalize">{{ users[index].first_name }}</td>
+                        <td class="text-capitalize">{{ users[index].last_name }}</td>
                         <td>
                             <button @click="editUserDiv(this.users[index])" class="btn btn-sm btn-warning fw-bold hoverTransform">Edit</button>
                         </td>
@@ -230,7 +217,7 @@ export default {
             <input v-model="createUserObj.firstName" type="text" name="firstName">
             <label for="lastName">Last Name</label>
             <input v-model="createUserObj.lastName" type="text" name="lastName">
-            <button @click="createUser" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Register</button>
+            <button @click="createUser" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Update</button>
         </div>
         <!-- end User Create Body -->
     </div>
@@ -266,9 +253,9 @@ export default {
             <label for="confirmPassword">Confirm New Password</label>
             <input v-model="editUserObj.confirmNewPassword" type="password" name="confirmPassword">
             <label for="firstName">First Name</label>
-            <input v-model="editUserObj.firstName" type="text" name="firstName">
+            <input v-model="editUserObj.first_name" type="text" name="firstName">
             <label for="lastName">Last Name</label>
-            <input v-model="editUserObj.lastName" type="text" name="lastName">
+            <input v-model="editUserObj.last_name" type="text" name="lastName">
             <button @click="editUser" class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Register</button>
         </div>
         <!-- end User Edit Body -->

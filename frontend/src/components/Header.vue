@@ -3,7 +3,9 @@
 export default {
     name: 'Header',
     data() {
-        user : null
+        return {
+            user: {}
+        }
     },
     computed: {
         isInHome() {
@@ -29,13 +31,14 @@ export default {
         async authorize() {
             try {
                 const response = await this.axios.post('/api/auth/authorize')
-                this.user = {
+                const tempUser = {
                     id: response.data.id,
                     username: response.data.username,
                     role: response.data.role,
                     first_name: response.data.first_name,
                     last_name: response.data.last_name,
                 }
+                this.user = tempUser
             } catch (error) {
                 location.href = '/login'
             }
@@ -47,7 +50,7 @@ export default {
             location.href = '/predictor'
         },
         goToHome(){
-            location.href = './home'
+            location.href = '/'
         },   
         goToAdminDashboard() {
             location.href = '/admin'
@@ -69,9 +72,9 @@ export default {
 <div class="d-flex align-items-center headerContainer justify-content-between px-4 py-3">
     <div class="leftHeader" style="">
         <a @click="goToHome" href="#"><h5 style="display: inline;">Home</h5></a> 
-        <a v-if="user.role == 'doctor'" @click="goToPredictor" href="#"><h5 style="display: inline; margin-left: 30px ;">Predictor</h5></a> 
-        <a v-if="user.role == 'doctor'" @click="goToRecords" href="#"><h5 style="display: inline; margin-left: 30px ;">Records</h5></a> 
-        <a v-if="user.role == 'admin'" @click="goToAdminDashboard" href="#"><h5 style="display: inline; margin-left: 30px ;">Dashboard</h5></a> 
+        <a v-if="this.user.role == 'doctor'" @click="goToPredictor" href="#"><h5 style="display: inline; margin-left: 30px ;">Predictor</h5></a> 
+        <a v-if="this.user.role == 'doctor'" @click="goToRecords" href="#"><h5 style="display: inline; margin-left: 30px ;">Records</h5></a> 
+        <a v-if="this.user.role == 'admin'" @click="goToAdminDashboard" href="#"><h5 style="display: inline; margin-left: 30px ;">Dashboard</h5></a> 
     </div>
     <a href="">
         <div class="midheader" style="padding-right: 30px;" v-if="isInHome == false">

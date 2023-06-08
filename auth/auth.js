@@ -104,8 +104,8 @@ async function configureLocalStrategy(db) {
 // get all users
 router.post("/api/auth/getAllUsers", async (req, res) => {
     try {
-        const rows = await database.all(authDb, `SELECT role, username, first_name, last_name FROM users ORDER BY role ASC`, [], false);
-        res.send(rows);
+        const rows = await database.all(authDb, `SELECT id, role, username, first_name, last_name FROM users ORDER BY role ASC`, [], false);
+        res.json({ rows: rows }).send()
     } catch (error) {
         console.log("Error on /api/getAllUsers"); // temp
         console.log(error); // temp
@@ -141,10 +141,11 @@ router.post("/api/users/create", async (req, res) => {
         } else {
             // insert new user
             const hashedPassword = await bcrypt.hash(req.body.password, 10)
-            const row = await database.run(authDb, `INSERT INTO users (id, role, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword, req.body.first_name, req.body.last_name])
+            const row = await database.run(authDb, `INSERT INTO users (id, role, username, password, first_name, last_name) VALUES (?, ?, ?, ?, ?, ?)`, [uuidv4(), req.body.role, req.body.username, hashedPassword, req.body.firstName, req.body.lastName])
             res.json({ message: `Register success for user ${req.body.username}` }).send()
         }
     } catch (error) {
+        console.log(error) // temp
         res.status(401).json({message: error}).send()
     }
 });
@@ -168,12 +169,19 @@ router.post("/api/users/edit", async (req, res) => {
         if (!row) {
             throw 'No user found'
         } else {
-            await database.run(authDb, `UPDATE users SET role = ?, username = ?, firstName = ?, lastName = ?, password = ? WHERE id = ?`, [
-                req.body.role, req.body.username, req.body.firstName, req.body.lastName, bcrypt.hash(req.body.newPassword, 10), req.body.id
-            ])
+            if (req.body.newPassword) {
+                await database.run(authDb, `UPDATE users SET role = ?, username = ?, first_name = ?, last_name = ?, password = ? WHERE id = ?`, [
+                    req.body.role, req.body.username, req.body.first_name, req.body.last_name, bcrypt.hash(req.body.newPassword, 10), req.body.id
+                ])
+            } else {
+                await database.run(authDb, `UPDATE users SET role = ?, username = ?, first_name = ?, last_name = ? WHERE id = ?`, [
+                    req.body.role, req.body.username, req.body.first_name, req.body.last_name, req.body.id
+                ])
+            }
             res.status(200).json({message: 'User updated'}).send()
         }
     } catch (error) {
+        console.log(error)
         res.status(401).json({message: error}).send()
     }
 })
@@ -187,13 +195,13 @@ router.post("/api/auth/login", (req, res) => {
                 if (err) {
                     console.log("Error on req.logIn"); // temp
                     console.log(err);
-                    res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
+                    res.status(401).json({ message: "Login error", redirect: "/login?error=1" }).send();
                 } else {
-                    res.json({ messsage: "Login success", role: user.role }).send();
+                    res.json({ message: "Login success", role: user.role }).send();
                 }
             });
         } else {
-            res.status(401).json({ messsage: "Login error", redirect: "/login?error=1" }).send();
+            res.status(401).json({ message: "Login error", redirect: "/login?error=1" }).send();
         }
     })(req, res);
 });

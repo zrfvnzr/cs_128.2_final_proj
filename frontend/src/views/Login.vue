@@ -50,7 +50,7 @@ export default {
                 </div>
                 <div class="d-flex flex-column align-items-center form-group">
                     <label for="username">Password <h6 style="display: inline; color: red; ">*</h6></label>
-                    <input v-model="password" type="text" class="form-control" name="password" id="password" placeholder="Required">
+                    <input v-model="password" type="password" class="form-control" name="password" id="password" placeholder="Required">
                 </div>
             </form>
             <button @click="login()" id="loginButton" style="color: white; font-weight: 500;">Login</button>
@@ -107,9 +107,20 @@ input[type=text]{
     box-sizing: border-box;
     width: 400px;
     margin-right: 30px;
-    
+}
+input[type=password]{
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 6px;
+    border-color:#5BB95A ;
+    box-sizing: border-box;
+    width: 400px;
+    margin-right: 30px;
 }
 input[type=text]::-webkit-input-placeholder{
+    opacity: 0.5;
+}
+input[type=password]::-webkit-input-placeholder{
     opacity: 0.5;
 }
 input[type=checkbox]{

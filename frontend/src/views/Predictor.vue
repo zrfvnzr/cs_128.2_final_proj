@@ -63,9 +63,22 @@ export default {
             // PREDICTOR
             async predictImage(){
                 try {
+                    let formData = new FormData();
+                    let imageFile = fundusIMG
+                    // formData.append("file", imagefile.files[0]);
+                    formData.append("file", imageFile)
+
+                    // axios.post('upload_file', formData, {
+                    //     headers: {
+                    //     'Content-Type': 'multipart/form-data'
+                    //     }
+                    // })
+
                     this.isLoading = true
-                    const response = await this.axios.post('http://cs1282finalproj-production.up.railway.app/api/predict', {
-                        // TO DO
+                    const response = await this.axios.post('http://cs1282finalproj-production.up.railway.app/api/predict', formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
                     })
                     this.isLoading = false
                 } catch (error) {
