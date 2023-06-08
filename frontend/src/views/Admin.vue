@@ -145,7 +145,7 @@ export default {
 <div id="adminMainDiv" style="padding: 3rem 3rem 0 3rem;">
 
     <!-- Users Index -->
-    <div ref="usersIndexDiv">
+    <div id="usersIndexDiv" ref="usersIndexDiv">
         <!-- Users Index Header -->
         <div class="header">
             <div>
@@ -316,8 +316,14 @@ export default {
 
 /* Main Divs */
 #adminMainDiv > div {
+    align-items: center;
     flex-direction: column;
 }
+
+#usersIndexDiv {
+    align-items: stretch !important;
+}
+
 .main-div {
     align-items: start;
     border: 2px solid black;
@@ -325,7 +331,11 @@ export default {
     flex-direction: column;
     margin-bottom: 2rem;
     min-height: 5rem;
-    padding: 3rem;
+    padding: 2rem;
+}
+
+.main-div select {
+    width: 100%;
 }
 
 /* Labels */
@@ -344,6 +354,7 @@ label {
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: .5rem;
+    width: 100%;
 }
     .header > div {
         display: flex;
