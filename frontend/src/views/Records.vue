@@ -24,9 +24,7 @@ export default {
             }
         },
         computed:{
-            formattedDate(date){
-                   return moment(date).format("MMM DD YYYY") 
-            }
+            
         },
         methods: {
             async read() {
@@ -40,6 +38,9 @@ export default {
             },
             async myMounted(){
                 await this.read()
+            },
+            formattedDate(date){
+                   return moment(date).format("MMM DD YYYY") 
             }
         },
         beforeRouteEnter (to, from, next) {
