@@ -45,6 +45,7 @@ export default {
                         result: this.result
                     })
                     this.isLoading = false
+                    this.patient = {}
                     location.href = '/records'
                 } catch (error) {
                     alert('Error on saveInfo ')
@@ -68,15 +69,16 @@ export default {
             async predictImage(){
                 try {
                     let formData = new FormData();
-                    let imageFile = this.fundusIMG
+                    let imageFile = document.querySelector('#fundusInput')
                     // formData.append("file", imagefile.files[0]);
-                    formData.append("file", imageFile)
+                    formData.append("file", imageFile.files[0])
                     this.isLoading = true
                     const response = await this.axios.post('https://deep-dr-flask.up.railway.app/api/predict', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     })
+                    imageFile.value = ''
                     alert(response.data.result)
                     this.result = response.data.result
                     this.isLoading = false
@@ -135,7 +137,7 @@ export default {
                 </div>  
                 <div class="col-md" style="width: 20%;">
                         <label for="contact">Contact Number <h6 style="display: inline; color: red;">*</h6></label>
-                        <input v-model="patient.contact" type="text" class="form-control" name="contact" id="contact" placeholder="">
+                        <input v-model="patient.contact_number" type="text" class="form-control" name="contact" id="contact" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
                     <label for="assignedPhysician">Assigned Physician <h6 style="display: inline; color: red;">*</h6></label>
@@ -147,7 +149,7 @@ export default {
             <div id="upimgHeader">
                 <h5 style="display: inline; float: left;"><i class="bi bi-card-image" style="padding-right: 5px"></i>Upload Image</h5>
                 <button @click="uploadImage" id="uploadButton" style="color: white">Select Image</button>
-                <input type="file" ref="fileInput" style="display: none" accept="image/*" @change="handleFileSelect">
+                <input type="file" id="fundusInput" ref="fileInput" style="display: none" accept="image/*" @change="handleFileSelect">
             </div>
             <div id="imageDiv" style="background-color: white;">
                 <img :src="fundusIMG" v-if="fundusIMG" alt="Uploaded Image">

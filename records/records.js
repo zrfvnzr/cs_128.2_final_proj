@@ -61,6 +61,7 @@ router.post("/api/records/create", async (req, res) => {
         ])
         res.json({ message: `Record created for user ${req.body.firstName + req.body.middleName, + req.body.lastName}` }).send()
     } catch (error) {
+        console.log(error)
         res.status(401).json({message: error}).send()
     }
 });
