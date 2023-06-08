@@ -13,6 +13,22 @@ async function createInitialTables(db) {
         last_name TEXT NOT NULL
     `,)
     // end users table
+    // records table
+    await database.createTable(db, 'records', `
+        id TEXT UNIQUE PRIMARY KEY,
+        date_examined DATE NOT NULL,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        middle_name TEXT NOT NULL,
+        sex TEXT NOT NULL,
+        birthday DATE NOT NULL,
+        age NUMBER NOT NULL,
+        email TEXT NOT NULL,
+        contact_number TEXT NOT NULL,
+        assigned_physician TEXT NOT NULL,
+        result TEXT NOT NULL
+    `)
+    // end records table
 }
 
 async function createInitialRows(db) {
