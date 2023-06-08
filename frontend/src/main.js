@@ -8,11 +8,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 // import route components
 import Admin from './views/Admin.vue'
+import Home from './views/Home.vue'
+import Header from './components/Header.vue'
 
 // set routes
 const routes = [
 //   {path: '/', component: Home}
-    {path: '/admin', component: Admin}
+    {path: '/admin', component: Admin},
+    {path: '/', component: Home},
 ]
 
 const router = createRouter({
