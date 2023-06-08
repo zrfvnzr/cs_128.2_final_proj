@@ -3,13 +3,12 @@ import Header from '../components/Header.vue'
 import Loading from '../components/Loading.vue'
 export default {
     name: 'Home',
-    components: {Header, Loading}
+    components: {Header, Loading},
 }
 </script>
 
 <template>
     <div>
-        <Loading />
         <div class="centered-div background-cover">
             <Header></Header>
             <h1 id="app-title">Deep<span id="app-title-dr">DR</span></h1>
@@ -21,27 +20,27 @@ export default {
             <h1 id="creators-style">CREATORS</h1>
             <div class="avatar-group flex-wrap">
                 <div class="avatar">
-                    <img src="../components/seth.jpg" alt="Paolo Licup">
+                    <img src="../components/paolo.png" alt="Paolo Licup">
                     <p class="avatar-name">JOHN PAOLO LICUP</p>
                     <p class="avatar-pos">Head Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/seth.jpg" alt="Emman Ednalan">
+                    <img src="../components/emman.jpg" alt="Emman Ednalan">
                     <p class="avatar-name">EMMANUEL EDNALAN</p>
                     <p class="avatar-pos">Frontend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/seth.jpg" alt="Dan Calibuyot">
+                    <img src="../components/dhone.jpg" alt="Dan Calibuyot">
                     <p class="avatar-name">DHONE CALIBUYOT</p>
                     <p class="avatar-pos">Frontend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/seth.jpg" alt="Nath Ortega">
+                    <img src="../components/nath.png" alt="Nath Ortega">
                     <p class="avatar-name">NATHANIEL ORTEGA</p>
                     <p class="avatar-pos">Backend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/seth.jpg" alt="Seth Saluta">
+                    <img src="../components/seth.png" alt="Seth Saluta">
                     <p class="avatar-name">SETH JARED SALUTA</p>
                     <p class="avatar-pos">Backend Developer</p>
                 </div>
