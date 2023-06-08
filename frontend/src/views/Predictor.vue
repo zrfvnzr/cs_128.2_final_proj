@@ -9,18 +9,19 @@ export default {
                 isLoading: false,
                 patient: {
                     lastName: '',
-                    givenName: '',
+                    firstName: '',
                     middleName: '',
                     sex: 'male',
                     birthday: '',
                     age: null,
                     email: '',
-                    contact: null,
+                    contact_number: null,
                     assignedPhysician: '',
                 },
                 fundusIMG: null,
                 patientID: null, //pero ito diba auto-generatedonce nasave sa database pati
                 dateExamined: Date, // ito diba
+                result: ''
             }
         },
         methods: {
@@ -30,18 +31,21 @@ export default {
                 try {
                     console.log(this.patient)
                     // DATABASE FOR PATIENT RECORDS
-                    const response = await this.axios.post('/api/records', {
+                    const response = await this.axios.post('/api/records/create', {
+                        dateExamined: Date.now(),
+                        firstName: this.patient.firstName,
                         lastName: this.patient.lastName,
-                        givenName: this.patient.givenName,
                         middleName: this.patient.middleName,
                         sex: this.patient.sex,
                         birthday: this.patient.birthday,
                         age: this.patient.age,
                         email: this.patient.email,
-                        contact: this.patient.contact,
+                        contact_number: this.patient.contact_number,
                         assignedPhysician: this.patient.assignedPhysician,
+                        result: this.result
                     })
                     this.isLoading = false
+                    location.href = '/records'
                 } catch (error) {
                     alert('Error on saveInfo ')
                     this.isLoading = false
@@ -64,24 +68,21 @@ export default {
             async predictImage(){
                 try {
                     let formData = new FormData();
-                    let imageFile = fundusIMG
+                    let imageFile = this.fundusIMG
                     // formData.append("file", imagefile.files[0]);
                     formData.append("file", imageFile)
-
-                    // axios.post('upload_file', formData, {
-                    //     headers: {
-                    //     'Content-Type': 'multipart/form-data'
-                    //     }
-                    // })
-
                     this.isLoading = true
                     const response = await this.axios.post('https://deep-dr-flask.up.railway.app/api/predict', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
                     })
+                    alert(response.data.result)
+                    this.result = response.data.result
                     this.isLoading = false
+                    this.saveInfo()
                 } catch (error) {
+                    console.log(error)
                     alert(error.response.data.message)
                     this.isLoading = false
                 }
@@ -109,13 +110,12 @@ export default {
                     <input v-model="patient.middleName" type="text" class="form-control" name="middleName" id="middleName" placeholder="  ">
                 </div>
                 <div class="col-md" style="margin-top: 20px;">
-                    <!-- <label for="sex" style="padding-right: 10px;">Sex <h6 style="display: inline; color: red;">*</h6></label> -->
                     <div class="form-check form-check-inline" >
-                        <input v-model="patient" :value="'male'" class="form-check-input" type="radio" name="sex" id="male">
+                        <input v-model="patient.sex" :value="'male'" class="form-check-input" type="radio" name="sex" id="male">
                         <label class="form-check-label" for="male">Male</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input v-model="patient" :value="'female'" class="form-check-input" type="radio" name="sex" id="female" >
+                        <input v-model="patient.sex" :value="'female'" class="form-check-input" type="radio" name="sex" id="female" >
                         <label class="form-check-label" for="female">Female</label>
                     </div>
                 </div>
@@ -138,7 +138,7 @@ export default {
                         <input v-model="patient.contact" type="text" class="form-control" name="contact" id="contact" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
-                    <label for="assignedPhysician">Assigned assignedPhysician <h6 style="display: inline; color: red;">*</h6></label>
+                    <label for="assignedPhysician">Assigned Physician <h6 style="display: inline; color: red;">*</h6></label>
                     <input v-model="patient.assignedPhysician" type="text" class="form-control" name="assignedPhysician" id="assignedPhysician" placeholder="">
                 </div>
             </form>
@@ -152,7 +152,7 @@ export default {
             <div id="imageDiv" style="background-color: white;">
                 <img :src="fundusIMG" v-if="fundusIMG" alt="Uploaded Image">
             </div>
-            <button @click="predictImage(); saveInfo();" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
+            <button @click="predictImage()" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
         </div>
     </div>
 
