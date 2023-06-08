@@ -75,7 +75,7 @@ export default {
                     // })
 
                     this.isLoading = true
-                    const response = await this.axios.post('http://cs1282finalproj-production.up.railway.app/api/predict', formData, {
+                    const response = await this.axios.post('https://deep-dr-flask.up.railway.app/api/predict', formData, {
                         headers: {
                             'Content-Type': 'multipart/form-data'
                         }
