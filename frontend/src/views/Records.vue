@@ -29,15 +29,26 @@ export default {
             }
         },
         methods: {
-            read() {
-                this.axios.get('/api/records').then(({ data }) => {
-                    this.patients = data;
-                })
-                    .catch((err) => console.error(err));
+            async read() {
+                try {
+                    const response = await this.axios.post('/api/records/getAllRecords') 
+                this.patients = response.data.rows;
+                }
+                catch(error) {  
+                    alert(error.response.data.message)
+                };
             },
-            mounted(){
-                this.read()
+            async myMounted(){
+                await this.read()
             }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(async vm => {
+                await vm.myMounted()
+            })
+        },
+        async mounted(){
+            await this.myMounted()
         }
 }
 </script>

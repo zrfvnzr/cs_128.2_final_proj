@@ -27,18 +27,18 @@ async function main(app, db, db_path) {
 
 // Routes
 
-// get all users
+// get all records
 router.post("/api/records/getAllRecords", async (req, res) => {
     try {
         const rows = await database.all(authDb, `SELECT * FROM records ORDER BY id ASC`, [], false);
-        res.send(rows);
+        res.json({rows: rows}).send();
     } catch (error) {
         console.log("Error on /api/records/getAllRecords");
         console.log(error);
-        res.json({ message: error }).send();
+        res.status(401).json({ message: error }).send();
     }
 });
-// end get all users
+// end get all records
 
 // create
 router.post("/api/records/create", async (req, res) => {
