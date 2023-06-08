@@ -5,8 +5,22 @@ export default {
         components: {Header},
         data() {
             return {
-                patients: [],  //patient records database 
-                searchFilter: '',
+                patients: [
+                    {
+                        id: 1,
+                        dateExamined: moment().format("MMM DD YYYY"), 
+                        firstName: 'Paolo',
+                        middleName: 'Mercado',
+                        lastName: 'Licup',
+                        sex: 'Male',
+                        birthDate: 'May 10 2000',
+                        age: 23,
+                        email: 'jmlicup@up.edu.ph',
+                        contact: '09560097819',
+                        physician: 'Doc Will',
+                        testResult: 'With Diabetic Retinopathy'
+                    }
+                ],  //patient records database
                 filteredPatients: []
             }
         },
@@ -14,10 +28,6 @@ export default {
 
         },
         methods: {
-            search(){
-                this.filteredPatients = this.patients.filter((patient) =>
-                patient.toLowerCase().includes(this.searchFilter.toLocaleLowerCase()))
-            },
             read() {
                 axios.get('/api/patientRecords').then(({ data }) => {
                     this.patients = data;
@@ -37,8 +47,6 @@ export default {
     <div class="" id="recordsContainer">
         <div class="recordsHeader">
             <h5 style="color:#5BB95A; float: left; position: absolute; bottom: 0;"><i class="bi bi-collection"></i> Results</h5>
-            <button @click="search" id="searchButton" style="color: white;float: right; position: absolute; bottom: 0; right: 0;">Search</button>
-            <input v-model="searchFilter" type="text" placeholder="Search..." style="float: right; position: absolute; bottom: 0; right: 0; margin-right: 70px;">
         </div>
         <div id="recordsDiv" >
             <table style="width: 100%;">
@@ -58,16 +66,16 @@ export default {
                 </thead>
                 <tbody style="overflow-y: scroll;">
                     <tr v-for="(patient, index) in patients" :key="index">
-                    <td>{{ patients.id }}</td>
-                    <td>{{ patients.dateExamined }}</td>
-                    <td>{{ patients.lastName }} + "," + {{ patients.givenName }}</td>
-                    <td>{{ patients.sex }}</td>
-                    <td>{{ patients.birthDate }}</td>
-                    <td>{{ patients.age }}</td>
-                    <td>{{ patients.email }}</td>
-                    <td>{{ patients.contact }}</td>
-                    <td>{{ patients.physician }}</td>
-                    <td>{{ patients.testResult }}</td>
+                    <td>{{ patients[index].id }}</td>
+                    <td>{{ patients[index].dateExamined }}</td>
+                    <td class="wsnwoh">{{ patients[index].lastName + ", " + patients[index].firstName + " " + patients[index].middleName }}</td>
+                    <td>{{ patients[index].sex }}</td>
+                    <td class="wsnwoh">{{ patients[index].birthDate }}</td>
+                    <td>{{ patients[index].age }}</td>
+                    <td class="wsnwoh">{{ patients[index].email }}</td>
+                    <td>{{ patients[index].contact }}</td>
+                    <td class="wsnwoh">{{ patients[index].physician }}</td>
+                    <td class="wsnwoh">{{ patients[index].testResult }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -114,5 +122,12 @@ export default {
 }
 table, th, td {
   border:1px solid black;
+}
+th, td {
+    padding: .5rem;
+}
+.wsnwoh {
+    white-space: nowrap;
+    overflow: hidden;
 }
 </style>

@@ -1,11 +1,12 @@
 <script>
 import Header from '../components/Header.vue'
-// import router from '../main.js'
+import Loading from '../components/Loading.vue'
 export default {
         name: 'Predictor',
-        components: {Header},
+        components: {Header, Loading},
         data() {
             return {
+                isLoading: false,
                 patient: {
                     lastName: '',
                     givenName: '',
@@ -25,6 +26,7 @@ export default {
         methods: {
             // STORE PATIENT INFO IN DATABASE
             async saveInfo(){
+                // TO DO
                 try {
                     console.log(this.patient)
                     // DATABASE FOR PATIENT RECORDS
@@ -39,10 +41,10 @@ export default {
                         contact: this.patient.contact,
                         physician: this.patient.physician,
                     })
+                    this.isLoading = false
                 } catch (error) {
-                    console.log('Error on saveInfo')
-                    console.log(error)
                     alert('Error on saveInfo ')
+                    this.isLoading = false
                 }
             },
             // SELECT IMAGE 
@@ -59,24 +61,26 @@ export default {
                 fileReader.readAsDataURL(file);
             },
             // PREDICTOR
-            predict(){
-
-            },
-            async signoutButton(){
-            try {            
-                await router.post("/api/auth/logout");
-                this.$router.push("/login?loggedOut=1");
-            } catch (error) {
-                console.log(error)
+            async predictImage(){
+                try {
+                    this.isLoading = true
+                    const response = await this.axios.post('http://cs1282finalproj-production.up.railway.app/api/predict', {
+                        // TO DO
+                    })
+                    this.isLoading = false
+                } catch (error) {
+                    alert(error.response.data.message)
+                    this.isLoading = false
+                }
             }
-        }
         }
 }
 </script>
 
 <template>
+<Loading v-if="isLoading" />
 <Header />
-    <div class="" id="container">
+    <div v-if="!isLoading" class="p-4" id="container">
         <div class="patientInformation">
             <form class="row" style="">
                 <div class="col-md" style="width: 20%;">
@@ -132,19 +136,16 @@ export default {
                 <button @click="uploadImage" id="uploadButton" style="color: white">Select Image</button>
                 <input type="file" ref="fileInput" style="display: none" accept="image/*" @change="handleFileSelect">
             </div>
-            <div id="imageDiv" >
+            <div id="imageDiv" style="background-color: white;">
                 <img :src="fundusIMG" v-if="fundusIMG" alt="Uploaded Image">
             </div>
-            <button @click="predictImage, saveInfo" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
+            <button @click="predictImage(); saveInfo();" id="predictButton" style="color: white; font-weight: 500;">Predict</button>
         </div>
     </div>
 
 </template>
 
 <style>
-    .patientInformation{
-        margin: 10px;
-    }
     #container{
         max-width: 100%;
         min-height: 100vh;

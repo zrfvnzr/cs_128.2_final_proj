@@ -2,7 +2,34 @@
 
 export default {
     name: 'Header',
+    computed: {
+        isInHome() {
+            return window.location.pathname == '/'
+        }
+    },
+    beforeRouteEnter (to, from, next) {
+        next(async vm => {
+            await vm.myMounted()
+        })
+    },
+    async mounted() {
+        // await this.myMounted()
+    },
     methods: {
+        async myMounted() {
+            try {
+                await this.authorize()
+            } catch(error) {
+                console.error(error)
+            }
+        },
+        async authorize() {
+            try {
+                const response = await this.axios.post('/api/auth/authorize')
+            } catch (error) {
+                location.href = '/login'
+            }
+        },
         goToRecords() {
             location.href = '/records'
         },
@@ -12,12 +39,12 @@ export default {
         goToHome(){
             location.href = './home'
         },       
-        async signoutButton(){
+        async logOut(){
             try {            
-                await router.post("/api/auth/logout");
+                await this.axios.post("/api/auth/logout");
                 location.href = "/login?loggedOut=1"
             } catch (error) {
-                console.log(error)
+                alert(error.response.data.message)
             }
         }
     }
@@ -26,19 +53,19 @@ export default {
 </script>
 
 <template>
-<div class="headerContainer">
+<div class="d-flex align-items-center headerContainer justify-content-between px-4 py-3">
     <div class="leftHeader" style="">
         <a @click="goToHome" href="#"><h5 style="display: inline;">Home</h5></a> 
         <a @click="goToPredictor" href="#"><h5 style="display: inline; margin-left: 30px ;">Predictor</h5></a> 
         <a @click="goToRecords" href="#"><h5 style="display: inline; margin-left: 30px ;">Records</h5></a> 
     </div>
     <a href="">
-            <div class="midheader" style="padding-right: 30px;">
-                    <h1 style="display: inline; font-weight:600; color: #5BB95A;">Deep</h1>
-                    <h1 style="display: inline; font-weight:700; color: #00A0DC;">DR</h1>
-            </div>
+        <div class="midheader" style="padding-right: 30px;" v-if="isInHome == false">
+            <h1 style="display: inline; font-weight:800; color: #5BB95A;">Deep</h1>
+            <h1 style="display: inline; font-weight:800; color: #00A0DC;">DR</h1>
+        </div>
     </a> 
-    <button id="signoutButton" style="color: white;">Log Out</button>
+    <button @click="logOut" id="signoutButton" style="color: white;">Log Out</button>
 </div>
 </template>
 
@@ -46,7 +73,7 @@ export default {
 .leftHeader {
     display:inline; 
     float: left;
-    margin-top:  20px;
+    /* margin-top:  20px; */
 }
 .midheader{
     display: inline;
@@ -54,8 +81,8 @@ export default {
 }
 .headerContainer{
     min-width: 100%;
-    min-height: 60px;
-    background-image: url('headerBG.png');
+    min-height: 75px;
+    background-image: url();
     background-size: cover;
     color: black;
     text-align: center;
@@ -63,7 +90,7 @@ export default {
     padding-right: 20px;
 }
 a {
-    margin-top:  20px;
+    /* margin-top:  20px; */
     color: black;
     text-decoration: none;
     position: static;
@@ -78,7 +105,7 @@ a:hover {
     display: inline;
     position: relative; 
     float: right;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     font-size: 15px; 
     width: 10%;
     background-color: #8BC34A;
