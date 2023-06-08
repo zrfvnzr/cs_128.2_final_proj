@@ -1,6 +1,8 @@
 <script>
+import Header from '../components/Header.vue'
 export default {
     name: 'Admin',
+    components: {Header},
     data() {
         return {
             createUserObj: {
@@ -142,8 +144,8 @@ export default {
 }
 </script>
 <template>
-<div id="adminMainDiv" style="padding: 3rem 3rem 0 3rem;">
-
+<Header id="header" />
+<div id="adminMainDiv" style="padding: 2rem 3rem 0rem 3rem;">
     <!-- Users Index -->
     <div id="usersIndexDiv" ref="usersIndexDiv">
         <!-- Users Index Header -->
@@ -151,10 +153,6 @@ export default {
             <div>
                 <i class="bi bi-people-fill"></i>
                 <h1>Admin Dashboard</h1>
-            </div>
-            <div class="align-items-center d-flex">
-                <input class="h-100 lh-1 me-1 px-1" type="text" placeholder="Search users...">
-                <button class="btn btn-sm btn-success fw-bold hoverTransform lh-1 p-2">Search</button>
             </div>
             <div class="d-flex" style="gap: 1rem;">
                 <button @click="switchDiv(null, 'userCreateDiv')" class="btn btn-sm btn-warning fw-bold hoverTransform lh-1 p-2">
@@ -306,6 +304,9 @@ export default {
 </template>
 
 <style scoped>
+#header {
+    background: url(/navbar-bg.png);
+}
 /* TEMP */
 .temp-body {
     border: 2px dotted black;

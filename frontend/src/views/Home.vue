@@ -20,27 +20,27 @@ export default {
             <h1 id="creators-style">CREATORS</h1>
             <div class="avatar-group flex-wrap">
                 <div class="avatar">
-                    <img src="../components/paolo.png" alt="Paolo Licup">
+                    <img src="/paolo.png" alt="Paolo Licup">
                     <p class="avatar-name">JOHN PAOLO LICUP</p>
                     <p class="avatar-pos">Head Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/emman.jpg" alt="Emman Ednalan">
+                    <img src="/emman.jpg" alt="Emman Ednalan">
                     <p class="avatar-name">EMMANUEL EDNALAN</p>
                     <p class="avatar-pos">Frontend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/dhone.jpg" alt="Dan Calibuyot">
+                    <img src="/dhone.jpg" alt="Dan Calibuyot">
                     <p class="avatar-name">DHONE CALIBUYOT</p>
                     <p class="avatar-pos">Frontend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/nath.png" alt="Nath Ortega">
+                    <img src="/nath.png" alt="Nath Ortega">
                     <p class="avatar-name">NATHANIEL ORTEGA</p>
                     <p class="avatar-pos">Backend Developer</p>
                 </div>
                 <div class="avatar">
-                    <img src="../components/seth.png" alt="Seth Saluta">
+                    <img src="/seth.png" alt="Seth Saluta">
                     <p class="avatar-name">SETH JARED SALUTA</p>
                     <p class="avatar-pos">Backend Developer</p>
                 </div>
@@ -58,7 +58,7 @@ export default {
 }
 
 .background-cover{
-    background: url('../components/navbar-bg.png') no-repeat center center fixed;
+    background: url('/navbar-bg.png') no-repeat center center fixed;
     background-size: cover;
     height: 400px;
 }
