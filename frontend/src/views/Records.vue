@@ -112,7 +112,6 @@ export default {
     margin: auto;
     width: 90%;
     min-height: 400px;
-    background-color: #F2F2F2;
     margin-top:10px ;
     }
 #searchButton {
@@ -134,6 +133,7 @@ export default {
 }
 table, th, td {
   border:1px solid black;
+  background-color: #F2F2F2;
 }
 th, td {
     padding: .5rem;
