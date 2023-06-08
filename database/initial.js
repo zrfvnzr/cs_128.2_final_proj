@@ -45,6 +45,18 @@ async function createInitialRows(db) {
             uuidv4(), 'admin', 'admin1', hashedPassword, 'admin', 'one'
         ], true)
         // end admin
+        // doctor
+        var hashedPassword = await bcrypt.hash('doctor1', 10)
+        await database.run(db, `
+            INSERT INTO users (
+                id, role, username, password, first_name, last_name
+            ) VALUES (
+                ?, ?, ?, ?, ?, ?
+            )
+        `, [
+            uuidv4(), 'doctor', 'doctor1', hashedPassword, 'Doctor', 'One'
+        ], true)
+        // end doctor
     // end users
     // records
         await database.run(db, `
