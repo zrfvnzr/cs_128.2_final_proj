@@ -12,11 +12,11 @@ export default {
                     givenName: '',
                     middleName: '',
                     sex: 'male',
-                    birthDate: '',
+                    birthday: '',
                     age: null,
                     email: '',
                     contact: null,
-                    physician: '',
+                    assignedPhysician: '',
                 },
                 fundusIMG: null,
                 patientID: null, //pero ito diba auto-generatedonce nasave sa database pati
@@ -30,16 +30,16 @@ export default {
                 try {
                     console.log(this.patient)
                     // DATABASE FOR PATIENT RECORDS
-                    const response = await this.axios.post('/api/patientRecords', {
+                    const response = await this.axios.post('/api/records', {
                         lastName: this.patient.lastName,
                         givenName: this.patient.givenName,
                         middleName: this.patient.middleName,
                         sex: this.patient.sex,
-                        birthDate: this.patient.birthDate,
+                        birthday: this.patient.birthday,
                         age: this.patient.age,
                         email: this.patient.email,
                         contact: this.patient.contact,
-                        physician: this.patient.physician,
+                        assignedPhysician: this.patient.assignedPhysician,
                     })
                     this.isLoading = false
                 } catch (error) {
@@ -109,8 +109,8 @@ export default {
             </form>
             <form class="row" style="">
                 <div class="col-md" style="width: 20%;">
-                        <label for="birthDate">Date of Birth <h6 style="display: inline; color: red;">*</h6></label>
-                        <input v-model="patient.birthDate" type="text" class="form-control" name="birthDate" id="birthDate" placeholder="">
+                        <label for="birthday">Date of Birth <h6 style="display: inline; color: red;">*</h6></label>
+                        <input v-model="patient.birthday" type="text" class="form-control" name="birthday" id="birthday" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
                     <label for="age">Age</label>
@@ -125,8 +125,8 @@ export default {
                         <input v-model="patient.contact" type="text" class="form-control" name="contact" id="contact" placeholder="">
                 </div>
                 <div class="col-md" style="width: 30%;">
-                    <label for="physician">Assigned Physician <h6 style="display: inline; color: red;">*</h6></label>
-                    <input v-model="patient.physician" type="text" class="form-control" name="physician" id="physician" placeholder="">
+                    <label for="assignedPhysician">Assigned assignedPhysician <h6 style="display: inline; color: red;">*</h6></label>
+                    <input v-model="patient.assignedPhysician" type="text" class="form-control" name="assignedPhysician" id="assignedPhysician" placeholder="">
                 </div>
             </form>
         </div>

@@ -6,38 +6,49 @@ export default {
         data() {
             return {
                 patients: [
-                    {
-                        id: 1,
-                        dateExamined: moment().format("MMM DD YYYY"), 
-                        firstName: 'Paolo',
-                        middleName: 'Mercado',
-                        lastName: 'Licup',
-                        sex: 'Male',
-                        birthDate: 'May 10 2000',
-                        age: 23,
-                        email: 'jmlicup@up.edu.ph',
-                        contact: '09560097819',
-                        physician: 'Doc Will',
-                        testResult: 'With Diabetic Retinopathy'
-                    }
+                    // {
+                    //     id: 1,
+                    //     dateExamined: moment().format("MMM DD YYYY"), 
+                    //     firstName: 'Paolo',
+                    //     middleName: 'Mercado',
+                    //     lastName: 'Licup',
+                    //     sex: 'Male',
+                    //     birthDate: 'May 10 2000',
+                    //     age: 23,
+                    //     email: 'jmlicup@up.edu.ph',
+                    //     contact: '09560097819',
+                    //     assignedPhysician: 'Doc Will',
+                    //     testResult: 'With Diabetic Retinopathy'
+                    // }
                 ],  //patient records database
-                filteredPatients: []
             }
         },
         computed:{
-
+            formattedDate(date){
+                   return moment(date).format("MMM DD YYYY") 
+            }
         },
         methods: {
-            read() {
-                axios.get('/api/patientRecords').then(({ data }) => {
-                    this.patients = data;
-
-                })
-                    .catch((err) => console.error(err));
+            async read() {
+                try {
+                    const response = await this.axios.post('/api/records/getAllRecords') 
+                this.patients = response.data.rows;
+                }
+                catch(error) {  
+                    alert(error.response.data.message)
+                };
             },
-            mounted(){
-                this.read()
+            async myMounted(){
+                await this.read()
             }
+        },
+        beforeRouteEnter (to, from, next) {
+            next(async vm => {
+                await vm.myMounted()
+            })
+        },
+        async mounted(){
+            await this.myMounted()
         }
 }
 </script>
@@ -67,15 +78,15 @@ export default {
                 <tbody style="overflow-y: scroll;">
                     <tr v-for="(patient, index) in patients" :key="index">
                     <td>{{ patients[index].id }}</td>
-                    <td>{{ patients[index].dateExamined }}</td>
-                    <td class="wsnwoh">{{ patients[index].lastName + ", " + patients[index].firstName + " " + patients[index].middleName }}</td>
+                    <td>{{ formattedDate(patients[index].date_examined) }}</td>
+                    <td class="wsnwoh">{{ patients[index].last_name + ", " + patients[index].first_name + " " + patients[index].middle_name }}</td>
                     <td>{{ patients[index].sex }}</td>
-                    <td class="wsnwoh">{{ patients[index].birthDate }}</td>
+                    <td class="wsnwoh">{{ formattedDate(patients[index].birthday) }}</td>
                     <td>{{ patients[index].age }}</td>
                     <td class="wsnwoh">{{ patients[index].email }}</td>
-                    <td>{{ patients[index].contact }}</td>
-                    <td class="wsnwoh">{{ patients[index].physician }}</td>
-                    <td class="wsnwoh">{{ patients[index].testResult }}</td>
+                    <td>{{ patients[index].contact_number }}</td>
+                    <td class="wsnwoh">{{ patients[index].assigned_physician }}</td>
+                    <td class="wsnwoh">{{ patients[index].result }}</td>
                 </tr>
                 </tbody>
             </table>
