@@ -42,6 +42,8 @@ resp = requests.get(URL) # making requests to server
 with open(FILE_TO_SAVE_AS, "wb") as f: # opening a file handler to create new file 
     f.write(resp.content) # writing content to file
 
+print("File downloaded")
+
 # we need to define f1_score and pass it in custom_objects to load the model properly
 def f1_score(y_true, y_pred):
   true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
